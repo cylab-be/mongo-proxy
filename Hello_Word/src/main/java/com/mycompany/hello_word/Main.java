@@ -19,12 +19,13 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("HELLO");
         Scanner sc = new Scanner(System.in);
-        System.out.println("entrer un mot");
+        System.out.println("entrer un mot\n");
         String word = sc.nextLine();
         System.out.println("le mot entré est: "+ word);
-        System.out.println("entrer un nombre");
+        System.out.println("entrer un nombre\n");
         int number = sc.nextInt();
         System.out.println("le nombre entré est: "+ number);
+       
     }
     
 }
