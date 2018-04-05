@@ -30,8 +30,8 @@ public class TestClass {
         //System.out.println("Credentials ::" + credential);
 
         // Creating a Collection
-        // database.createCollection("myCollection");
-        System.out.println("collection created successfully");
+        //database.createCollection("testCollection");
+        //System.out.println("collection created successfully\n");
 
         // select to manipulate a collection
         MongoCollection<Document> collection = database.getCollection("myCollection");
@@ -52,7 +52,7 @@ public class TestClass {
         collection.insertOne(document);
         collection.insertOne(document2);
         */
-        System.out.println("Documents inserted successfully");
+        //System.out.println("Documents inserted successfully\n");
         collection.updateOne(Filters.eq("Title","Projet"), Updates.set("Reseau","mongodb-proxy"));
         collection.updateOne(Filters.eq("Title","dbStage"), Updates.set("Responsable","Debatty"));
         
@@ -61,11 +61,16 @@ public class TestClass {
         
         //we can choise document by using any data like reference in the document
         collection.updateOne(Filters.eq("Responsable","Thibault"), Updates.set("Title","Cylab"));
-        System.out.println("Document update successfully...");
+        System.out.println("Document update successfully...\n");
+        
         
         //Delete a document
         collection.deleteOne(Filters.eq("Title","dbStage"));
-        System.out.println("Document deleted successfully...");
+        System.out.println("Document deleted successfully...\n");
+        
+        //count document in collection
+        int number = (int) collection.count();
+        System.out.println(number+"\n");
 
         /*
      find() method of com.mongodb.client.MongoCollection class is used.
@@ -81,6 +86,12 @@ public class TestClass {
         while (it.hasNext()) {
             System.out.println(it.next());
             i++;
+        }
+            
+        //list all collection of the db
+            for (String name : database.listCollectionNames()) { 
+         System.out.println(name);
+         
         }
     }
 }
