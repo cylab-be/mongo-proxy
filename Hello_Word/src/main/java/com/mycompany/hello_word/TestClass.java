@@ -1,16 +1,26 @@
 package com.mycompany.hello_word;
 
-import org.bson.Document;
-import com.mongodb.client.FindIterable;
-import java.util.Iterator;
-
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-
 import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
+import com.mongodb.MongoClientURI;
+import com.mongodb.ServerAddress;
+
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
+
+import org.bson.Document;
+import java.util.Arrays;
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
+
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
+import static com.mongodb.client.model.Updates.*;
+import com.mongodb.client.result.UpdateResult;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TestClass {
 
@@ -93,5 +103,7 @@ public class TestClass {
          System.out.println(name);
          
         }
+            
+            
     }
 }
