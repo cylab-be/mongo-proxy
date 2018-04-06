@@ -53,9 +53,9 @@ public class Main {
      
     
      mongodbConnect mongodb = new mongodbConnect("myDb");
-     
+     //List<Document> documents = new ArrayList<Document>();
      mongodb.viewCollection("stageCollection");
-     mongodb.SearchDoc("Title","Cylab");
+     mongodb.SearchDoc("Title","Projet");
      mongodb.countDocument("stageCollection");
      mongodb.countDocument("myCollection");
      

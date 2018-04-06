@@ -103,6 +103,18 @@ public class TestClass {
          System.out.println(name);
          
         }
+        
+        //and other type of displaying all document
+        
+                MongoCursor<Document> cursor = collection.find().iterator();
+        try {
+            while (cursor.hasNext()) {
+                System.out.println(cursor.next().toJson());
+            }
+        } finally {
+            cursor.close();
+        }
+        
             
             
     }

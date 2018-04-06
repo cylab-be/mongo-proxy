@@ -11,6 +11,7 @@ import com.mongodb.client.MongoDatabase;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 
@@ -33,12 +34,17 @@ public class mongodbConnect {
         for( String name : database.listCollectionNames())
         {
             MongoCollection<Document> collection = database.getCollection(name);
-            FindIterable<Document> iterDoc = collection.find(Filters.eq(reference, value));
-            Iterator it = iterDoc.iterator();
-            int i = 1;
-            while (it.hasNext()) {
-            System.out.println("Document found in <"+name+"> view:" + it.next() +"\n");
-            i++;
+            MongoCursor<Document> cursor = collection.find(Filters.eq(reference, value)).iterator();
+            try 
+            {
+                while (cursor.hasNext()) 
+                {
+                    System.out.println("Document found in <"+name+"> view: \n\t"+cursor.next().toJson()+"\n");
+                }
+            } 
+            finally 
+            {
+                cursor.close();
             }
             
                 
@@ -50,14 +56,19 @@ public class mongodbConnect {
     public void viewCollection (String collectionName)
     {
         MongoCollection<Document> collection = database.getCollection(collectionName);
-        FindIterable<Document> iterDoc = collection.find();
-            Iterator it = iterDoc.iterator();
-            int i = 1;
-            while (it.hasNext()) {
-            System.out.println("Collection <"+ collectionName+"> view: " + it.next() +"\n");
-            i++;
+         MongoCursor<Document> cursor = collection.find().iterator();
+        try 
+        {
+            while (cursor.hasNext()) 
+            {
+                System.out.println("Collection <"+ collectionName+"> view: \n\t" +cursor.next().toJson()+"\n");
             }
-        
+        } 
+        finally 
+        {
+            cursor.close();
+        }
+                
     }
     
     //number of document in collection
