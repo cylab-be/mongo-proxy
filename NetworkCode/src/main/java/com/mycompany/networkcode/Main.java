@@ -56,8 +56,9 @@ public class Main {
         out.println(message);
 
         socketClient.close();
+        
      
-    }
+        }
     }
     catch(Exception e){
        e.printStackTrace();
