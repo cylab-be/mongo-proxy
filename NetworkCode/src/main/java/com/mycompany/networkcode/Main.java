@@ -37,9 +37,11 @@ public class Main {
 
        }
         
+        // creating a socket server and run it
         ServerSocket socketServeur = new ServerSocket(port);
         System.out.println("Lancement du serveur");
-
+        
+        //waiting for a input on the port 9632  
         while (true) {
         Socket socketClient = socketServeur.accept();
         String message = "";

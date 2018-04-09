@@ -19,6 +19,8 @@ import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import static com.mongodb.client.model.Updates.*;
 import com.mongodb.client.result.UpdateResult;
+import java.net.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,9 +28,8 @@ import java.util.List;
 
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
+    final static int port = 9632;
+    
     public static void main(String[] args) {
         
     
@@ -51,7 +52,7 @@ public class Main {
     collection.insertOne(doc);
     */
      
-    
+    /*
      mongodbConnect mongodb = new mongodbConnect("myDb");
      //List<Document> documents = new ArrayList<Document>();
      mongodb.viewCollection("stageCollection");
@@ -60,6 +61,31 @@ public class Main {
      mongodb.countDocument("myCollection");
      
      mongodb.SearchDoc("Title","stageAcademique");
+     */
+    
+    Socket socket;
+    DataInputStream userInput;
+    PrintStream theOutputStream;
+    
+    try {
+        //get server addresse
+        InetAddress serveur = InetAddress.getByName("Guy-RolandMacBook-Pro.local");
+        //creatiing the socket for a connection to the port 9632
+        socket = new Socket(serveur,port);
+        
+        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintStream out = new PrintStream (socket.getOutputStream());
+        
+        //out.println(args[1]);
+        System.out.println(in.readLine());
+        
+        }
+    catch (Exception e){
+        e.printStackTrace();
+        
+    
+    }
+        
      
      
      
