@@ -64,20 +64,37 @@ public class Main {
      */
     
     Socket socket;
-    DataInputStream userInput;
-    PrintStream theOutputStream;
+    DataInputStream in;
+    DataOutputStream out;
     
     try {
+        
+        
         //get server addresse
         InetAddress serveur = InetAddress.getByName("Guy-RolandMacBook-Pro.local");
         //creatiing the socket for a connection to the port 9632
         socket = new Socket(serveur,port);
+        //opening I/O stream
+        in = new DataInputStream(socket.getInputStream());
+        out = new DataOutputStream(socket.getOutputStream());
+        BufferedReader is = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        PrintStream out = new PrintStream (socket.getOutputStream());
+        out.writeBytes("Hello word\n");
+        out.writeBytes("connection success!\n");
         
-        //out.println(args[1]);
-        System.out.println(in.readLine());
+        BufferedReader message = new BufferedReader(new InputStreamReader(socket.getInputStream()) ); 
+        String responseLine;
+                while ((responseLine = message.readLine()) != null) {
+                    System.out.println("Server: " + responseLine);
+                    if (responseLine.contains("OK\n")) {
+                      break;
+                    }
+                }
+                
+                in.close();
+                out.close();
+                socket.close();
+        
         
         }
     catch (Exception e){

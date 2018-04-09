@@ -44,19 +44,26 @@ public class Main {
         //waiting for a input on the port 9632  
         while (true) {
         Socket socketClient = socketServeur.accept();
-        String message = "";
+        
 
         System.out.println("Connexion avec : "+socketClient.getInetAddress());
 
-        // InputStream in = socketClient.getInputStream();
-        // OutputStream out = socketClient.getOutputStream();
+       BufferedReader in = new BufferedReader(
 
-        BufferedReader in = new BufferedReader(
         new InputStreamReader(socketClient.getInputStream()));
-        PrintStream out = new PrintStream(socketClient.getOutputStream());
-        message = in.readLine();
-        out.println(message);
 
+        String message;
+        
+        while ((message = in.readLine())!= null )
+        {
+
+            System.out.print(message+"\n");
+        }
+        
+       PrintStream os = new PrintStream(socketClient.getOutputStream());
+        os.print("connect to : \n");
+        os.print("OK\n");
+        
         socketClient.close();
         
      
