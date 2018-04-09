@@ -75,23 +75,27 @@ public class Main {
         //creatiing the socket for a connection to the port 9632
         socket = new Socket(serveur,port);
         //opening I/O stream
-        in = new DataInputStream(socket.getInputStream());
+        
         out = new DataOutputStream(socket.getOutputStream());
         BufferedReader is = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         
         out.writeBytes("Hello word\n");
         out.writeBytes("connection success!\n");
         
-        BufferedReader message = new BufferedReader(new InputStreamReader(socket.getInputStream()) ); 
+        /*
         String responseLine;
-                while ((responseLine = message.readLine()) != null) {
+                while ((responseLine = is.readLine()) != null) {
                     System.out.println("Server: " + responseLine);
                     if (responseLine.contains("OK\n")) {
                       break;
                     }
-                }
+                }*/
                 
-                in.close();
+                
+                System.out.println(is.readLine());
+        
+                
+                is.close();
                 out.close();
                 socket.close();
         

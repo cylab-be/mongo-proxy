@@ -61,12 +61,9 @@ public class Main {
         }
         
        PrintStream os = new PrintStream(socketClient.getOutputStream());
-        os.print("connect to : \n");
-        os.print("OK\n");
+        os.println("connect to : \n");
+        os.println("OK\n");
         
-        socketClient.close();
-        
-     
         }
     }
     catch(Exception e){
