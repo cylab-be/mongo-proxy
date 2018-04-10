@@ -62,16 +62,16 @@ public class Main {
         try {
 
             //get server addresse
-            InetAddress serveur = InetAddress.getByName("Guy-RolandMacBook-Pro.local");
+            InetAddress serveur = InetAddress.getLocalHost();
             //creatiing the socket for a connection to the port 9632
             socket = new Socket(serveur, port);
             //opening I/O stream
 
-            out = new DataOutputStream(socket.getOutputStream());
+            PrintStream os = new PrintStream(socket.getOutputStream());
             BufferedReader is = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            out.writeBytes("Hello word\n");
-            out.writeBytes("connection success!\n");
+            os.println("Hi!");
+            System.out.println();
 
             /*
         String responseLine;
@@ -84,7 +84,7 @@ public class Main {
             System.out.println(is.readLine());
 
             is.close();
-            out.close();
+            os.close();
             socket.close();
 
         } catch (Exception e) {

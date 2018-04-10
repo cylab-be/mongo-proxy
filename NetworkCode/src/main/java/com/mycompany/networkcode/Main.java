@@ -48,17 +48,17 @@ public class Main {
 
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(socketClient.getInputStream()));
+                PrintStream os = new PrintStream(socketClient.getOutputStream());
 
                 String message;
 
                 while ((message = in.readLine()) != null) {
 
                     System.out.print(message + "\n");
+                    os.println("OK");
                 }
 
-                PrintStream os = new PrintStream(socketClient.getOutputStream());
-                os.println("connect to : \n");
-                os.println("OK\n");
+                os.println("Bye!");
 
             }
         } catch (Exception e) {
@@ -67,5 +67,4 @@ public class Main {
         }
 
     }
-
 }
