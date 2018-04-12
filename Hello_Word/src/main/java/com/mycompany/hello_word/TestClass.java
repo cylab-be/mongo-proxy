@@ -18,7 +18,7 @@ public class TestClass {
     public static void main(String args[]) {
 
         // Creating a Mongo client
-        MongoClient mongo = new MongoClient("localhost" , 27017);
+        MongoClient mongo = new MongoClient("localhost",27017);
 
         // Creating Credentials
         //MongoCredential credential;
@@ -36,8 +36,8 @@ public class TestClass {
         MongoCollection<Document> collection = database.getCollection("myCollection");
 
         // Creating a document
-        String names[] = {"Kue GUY" , "Kolawole Abdoulaye"};
-        String periode[] = {"03-04-2018" , " 25-05-2018"};
+        String names[] = {"Kue GUY","Kolawole Abdoulaye"};
+        String periode[] = {"03-04-2018","25-05-2018"};
 
         /*Document document = new Document("Title", "dbStage")
                 .append("departement", "CISS")
@@ -52,18 +52,18 @@ public class TestClass {
         collection.insertOne(document2);
          */
         //System.out.println("Documents inserted successfully\n");
-        collection.updateOne(Filters.eq("Title" , " Projet"), Updates.set("Reseau" , " mongodb-proxy"));
-        collection.updateOne(Filters.eq("Title" , "dbStage"), Updates.set("Responsable","Debatty"));
+        collection.updateOne(Filters.eq("Title","Projet"), Updates.set("Reseau","mongodb-proxy"));
+        collection.updateOne(Filters.eq("Title","dbStage"), Updates.set("Responsable","Debatty"));
 
         //when using the _id generate by the pc no changes updated
-        collection.updateOne(Filters.eq("_id" , " 5ac5ef702df9939b4359c1bc"), Updates.set("Web" , " laravel"));
+        collection.updateOne(Filters.eq("_id"," 5ac5ef702df9939b4359c1bc"), Updates.set("Web","laravel"));
 
         //we can choise document by using any data like reference in the document
-        collection.updateOne(Filters.eq("Responsable" , " Thibault"), Updates.set("Title" , " Cylab"));
+        collection.updateOne(Filters.eq("Responsable"," Thibault"), Updates.set("Title"," Cylab"));
         System.out.println("Document update successfully...\n");
 
         //Delete a document
-        collection.deleteOne(Filters.eq("Title" , " dbStage"));
+        collection.deleteOne(Filters.eq("Title","dbStage"));
         System.out.println("Document deleted successfully...\n");
 
         //count document in collection
