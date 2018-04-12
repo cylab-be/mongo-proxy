@@ -13,10 +13,19 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import java.util.Iterator;
 
-public class TestClass {
-
-    public static void main(String args[]) {
-        
+/**
+ *
+ * @author sonoflight
+ */
+public final class TestClass {
+    /**
+     * @param  constructor private constructor
+     */
+    private TestClass() { }
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args) {
         // Creating a Mongo client
         MongoClient mongo = new MongoClient("localhost");
 
@@ -35,12 +44,6 @@ public class TestClass {
         // select to manipulate a collection
         MongoCollection<Document> collection = database.getCollection(
                 "myCollection");
-
-        // Creating a document
-        String names[] = {
-            "Kue GUY", "Kolawole Abdoulaye"};
-        String periode[] = {
-            "03-04-2018", "25-05-2018"};
 
         /*Document document = new Document("Title", "dbStage")
                 .append("departement", "CISS")
@@ -83,28 +86,31 @@ public class TestClass {
         This method returns a cursor, so you need to iterate this cursor.
          */
         // Getting the iterable object
-        FindIterable<Document> iterDoc = collection.find();
+        FindIterable<Document> iter_doc = collection.find();
         int i = 1;
 
         // Getting the iterator
-        Iterator it = iterDoc.iterator();
+        Iterator it = iter_doc.iterator();
 
         while (it.hasNext()) {
             System.out.println(it.next());
-            i++;}
+            i++;
+            }
 
         //list all collection of the db
         for (String name : database.listCollectionNames()) {
-            System.out.println(name);}
+            System.out.println(name);
+            }
 
         //and other type of displaying all document
         MongoCursor<Document> cursor = collection.find().iterator();
         try {
             while (cursor.hasNext()) {
-                System.out.println(cursor.next().toJson());}
+                System.out.println(cursor.next().toJson());
+            }
+        } finally {
+            cursor.close();
         }
-            finally {
-            cursor.close();}
 
     }
 }
