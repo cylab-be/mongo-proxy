@@ -1,40 +1,30 @@
 package com.mycompany.hello_word;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.ServerAddress;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 
 import org.bson.Document;
-import java.util.Arrays;
-import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.DeleteResult;
-import static com.mongodb.client.model.Updates.*;
-import com.mongodb.client.result.UpdateResult;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class TestClass {
 
     public static void main(String args[]) {
 
         // Creating a Mongo client
-        MongoClient mongo = new MongoClient("localhost", 27017);
+        MongoClient mongo = new MongoClient("localhost" , 27017);
 
         // Creating Credentials
         //MongoCredential credential;
         //credential = MongoCredential.createCredential("sampleUser", "myDb",
         //        "password".toCharArray());
         //System.out.println("Connected to the database successfully");
-
         // Accessing the database
         MongoDatabase database = mongo.getDatabase("myDb");
         //System.out.println("Credentials ::" + credential);
@@ -42,13 +32,12 @@ public class TestClass {
         // Creating a Collection
         //database.createCollection("testCollection");
         //System.out.println("collection created successfully\n");
-
         // select to manipulate a collection
         MongoCollection<Document> collection = database.getCollection("myCollection");
 
         // Creating a document
-        String names[] = {"Kue GUY", "Kolawole Abdoulaye"};
-        String periode[] = {"03-04-2018", "25-05-2018"};
+        String names[] = {"Kue GUY" , "Kolawole Abdoulaye"};
+        String periode[] = {"03-04-2018" , " 25-05-2018"};
 
         /*Document document = new Document("Title", "dbStage")
                 .append("departement", "CISS")
@@ -61,26 +50,25 @@ public class TestClass {
                 .append("Web", "siteWeb");
         collection.insertOne(document);
         collection.insertOne(document2);
-        */
+         */
         //System.out.println("Documents inserted successfully\n");
-        collection.updateOne(Filters.eq("Title","Projet"), Updates.set("Reseau","mongodb-proxy"));
-        collection.updateOne(Filters.eq("Title","dbStage"), Updates.set("Responsable","Debatty"));
-        
+        collection.updateOne(Filters.eq("Title" , " Projet"), Updates.set("Reseau" , " mongodb-proxy"));
+        collection.updateOne(Filters.eq("Title" , "dbStage"), Updates.set("Responsable","Debatty"));
+
         //when using the _id generate by the pc no changes updated
-        collection.updateOne(Filters.eq("_id","5ac5ef702df9939b4359c1bc"), Updates.set("Web","laravel"));
-        
+        collection.updateOne(Filters.eq("_id" , " 5ac5ef702df9939b4359c1bc"), Updates.set("Web" , " laravel"));
+
         //we can choise document by using any data like reference in the document
-        collection.updateOne(Filters.eq("Responsable","Thibault"), Updates.set("Title","Cylab"));
+        collection.updateOne(Filters.eq("Responsable" , " Thibault"), Updates.set("Title" , " Cylab"));
         System.out.println("Document update successfully...\n");
-        
-        
+
         //Delete a document
-        collection.deleteOne(Filters.eq("Title","dbStage"));
+        collection.deleteOne(Filters.eq("Title" , " dbStage"));
         System.out.println("Document deleted successfully...\n");
-        
+
         //count document in collection
         int number = (int) collection.count();
-        System.out.println(number+"\n");
+        System.out.println(number + "\n");
 
         /*
      find() method of com.mongodb.client.MongoCollection class is used.
@@ -97,16 +85,15 @@ public class TestClass {
             System.out.println(it.next());
             i++;
         }
-            
+
         //list all collection of the db
-            for (String name : database.listCollectionNames()) { 
-         System.out.println(name);
-         
+        for (String name : database.listCollectionNames()) {
+            System.out.println(name);
+
         }
-        
+
         //and other type of displaying all document
-        
-                MongoCursor<Document> cursor = collection.find().iterator();
+        MongoCursor<Document> cursor = collection.find().iterator();
         try {
             while (cursor.hasNext()) {
                 System.out.println(cursor.next().toJson());
@@ -114,8 +101,6 @@ public class TestClass {
         } finally {
             cursor.close();
         }
-        
-            
-            
+
     }
 }
