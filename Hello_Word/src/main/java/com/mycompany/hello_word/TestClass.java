@@ -25,7 +25,7 @@ public final class TestClass {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args) {
+    public static void main(final String args) {
         // Creating a Mongo client
         MongoClient mongo = new MongoClient("localhost");
 
