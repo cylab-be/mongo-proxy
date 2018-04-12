@@ -1,4 +1,3 @@
-// class test
 package com.mycompany.hello_word;
 
 import com.mongodb.MongoClient;
@@ -64,7 +63,7 @@ public class TestClass {
         //when using the _id generate by the pc no changes updated
         collection.updateOne(Filters.eq(
                 "_id", "5ac5ef702df9939b4359c1bc"), Updates.set(
-                        "Web", "laravel"));
+                "Web", "laravel"));
 
         //wecan choise document by using any data like reference in the document
         collection.updateOne(Filters.eq(
@@ -80,8 +79,8 @@ public class TestClass {
         System.out.println(number + "\n");
 
         /*
-     find() method of com.mongodb.client.MongoCollection class is used.
-     This method returns a cursor, so you need to iterate this cursor.
+        find() method of com.mongodb.client.MongoCollection class is used.
+        This method returns a cursor, so you need to iterate this cursor.
          */
         // Getting the iterable object
         FindIterable<Document> iterDoc = collection.find();
@@ -107,8 +106,7 @@ public class TestClass {
             while (cursor.hasNext()) {
                 System.out.println(cursor.next().toJson());
             }
-        }
-        finally {
+        }finally {
             cursor.close();
         }
 
