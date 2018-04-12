@@ -91,25 +91,20 @@ public class TestClass {
 
         while (it.hasNext()) {
             System.out.println(it.next());
-            i++;
-        }
+            i++;}
 
         //list all collection of the db
         for (String name : database.listCollectionNames()) {
-            System.out.println(name);
-
-        }
+            System.out.println(name);}
 
         //and other type of displaying all document
         MongoCursor<Document> cursor = collection.find().iterator();
         try {
             while (cursor.hasNext()) {
-                System.out.println(cursor.next().toJson());
-            }
+                System.out.println(cursor.next().toJson());}
         }
             finally {
-            cursor.close();
-        }
+            cursor.close();}
 
     }
 }
