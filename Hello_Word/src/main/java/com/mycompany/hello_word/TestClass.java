@@ -1,3 +1,4 @@
+// class test
 package com.mycompany.hello_word;
 
 import com.mongodb.MongoClient;
@@ -37,8 +38,10 @@ public class TestClass {
                 "myCollection");
 
         // Creating a document
-        String names [] = {"Kue GUY", "Kolawole Abdoulaye"};
-        String periode [] = {"03-04-2018", "25-05-2018"};
+        String names[] = {
+            "Kue GUY", "Kolawole Abdoulaye"};
+        String periode[] = {
+            "03-04-2018", "25-05-2018"};
 
         /*Document document = new Document("Title", "dbStage")
                 .append("departement", "CISS")
@@ -104,7 +107,8 @@ public class TestClass {
             while (cursor.hasNext()) {
                 System.out.println(cursor.next().toJson());
             }
-        } finally {
+        }
+        finally {
             cursor.close();
         }
 
