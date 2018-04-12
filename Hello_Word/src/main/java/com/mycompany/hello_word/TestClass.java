@@ -16,9 +16,9 @@ import java.util.Iterator;
 public class TestClass {
 
     public static void main(String args[]) {
-        int prt = 27017;
+        
         // Creating a Mongo client
-        MongoClient mongo = new MongoClient("localhost", prt);
+        MongoClient mongo = new MongoClient("localhost");
 
         // Creating Credentials
         //MongoCredential credential;
@@ -106,7 +106,8 @@ public class TestClass {
             while (cursor.hasNext()) {
                 System.out.println(cursor.next().toJson());
             }
-        }finally {
+        }
+            finally {
             cursor.close();
         }
 
