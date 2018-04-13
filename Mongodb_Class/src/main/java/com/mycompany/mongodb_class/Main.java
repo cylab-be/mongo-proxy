@@ -1,50 +1,55 @@
 package com.mycompany.mongodb_class;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.ServerAddress;
 
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 import org.bson.Document;
+
 import java.util.Arrays;
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
+import java.net.Socket;
+import java.net.InetAddress;
 
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.DeleteResult;
-import static com.mongodb.client.model.Updates.*;
-import com.mongodb.client.result.UpdateResult;
-import java.net.*;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.io.PrintStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-public class Main {
-
-    final static int port = 9632;
-
-    public static void main(String[] args) {
-
-        /*MongoClient mongo = new MongoClient("localhost", 27017);
+/**
+ *
+ * @author sonoflight
+ */
+public final class Main {
+    /**
+     * @param  constructor private constructor
+     */
+    private Main() { }
+    private static final int PORT = 9632;
+    private static final int PORT_DB = 27017;
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(final String[] args) {
+    MongoClient mongo = new MongoClient("localhost", PORT_DB);
     MongoDatabase database = mongo.getDatabase("myDb");
-    MongoCollection<Document> collection = database.getCollection("stageCollection");
-         */
+    MongoCollection<Document> collection = database.getCollection(
+        "stageCollection");
         // creating document db
-        Document doc = new Document("id", 1).append("Title", "stageAcademique")
-                .append("personInCharge", new Document("Name", "Debatty").append("lastName", "Thibault"))
-                .append("students", Arrays.asList(new Document("Name", "Kue").append("lastName", "Guy").append("Project", "Mongo-Proxy"),
-                        new Document("Name", "Kolawole").append("lastName", "Abdoulaye").append("Project", "Laravel")))
-                .append("Info", new Document("Duration", Arrays.asList("03/04/18", "18/05/18")).append("Hours", "8h/day"));
+    Document doc = new Document(
+            "id", 1).append("Title", "stageAcademique").append(
+            "personInCharge", new Document("Name", "Debatty").append(
+                    "lastName", "Thibault"))
+    .append("students", Arrays.asList(new Document("Name", "Kue").append(
+            "lastName", "Guy").append("Project", "Mongo-Proxy"), new Document(
+                    "Name", "Kolawole").append("lastName", "Abdoulaye").append(
+             "Project", "Laravel")))
+    .append("Info", new Document("Duration", Arrays.asList(
+            "03/04/18", "18/05/18")).append("Hours", "8h/day"));
 
-        /* This is done once to document the database
+    //This is done once to document the database
     //adding the document to the collection in db
     collection.insertOne(doc);
-         */
  /*
      mongodbConnect mongodb = new mongodbConnect("myDb");
      //List<Document> documents = new ArrayList<Document>();
@@ -56,19 +61,17 @@ public class Main {
      mongodb.SearchDoc("Title","stageAcademique");
          */
         Socket socket;
-        DataInputStream in;
-        DataOutputStream out;
 
         try {
-
             //get server addresse
             InetAddress serveur = InetAddress.getLocalHost();
             //creatiing the socket for a connection to the port 9632
-            socket = new Socket(serveur, port);
+            socket = new Socket(serveur, PORT);
             //opening I/O stream
 
             PrintStream os = new PrintStream(socket.getOutputStream());
-            BufferedReader is = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader is = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
 
             os.println("Hi!");
             System.out.println();
@@ -87,8 +90,8 @@ public class Main {
             os.close();
             socket.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
 
         }
 
