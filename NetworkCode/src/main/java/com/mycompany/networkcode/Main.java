@@ -1,54 +1,63 @@
 package com.mycompany.networkcode;
 
-import java.net.*;
-import java.io.*;
-
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 /**
  *
  * @author sonoflight
  */
-public class Main {
+public final class Main {
+    private Main() { }
 
-    final static int port = 9632;
+    private static final int PORT = 9632;
 
-    public static void main(String[] args) {
-
+/**
+ *
+ * @param args
+ */
+    public static void main(final String args) {
         try {
+            InetAddress local_adr = InetAddress.getLocalHost();
+            System.out.println("local address : " + local_adr.getHostAddress());
 
-            InetAddress localAdr = InetAddress.getLocalHost();
-            System.out.println("local address : " + localAdr.getHostAddress());
+            System.out.println(" host name : " + local_adr.getHostName());
 
-            System.out.println(" host name : " + localAdr.getHostName());
+            InetAddress server_adr = InetAddress.getByName("www.google.be");
+            System.out.println("name  = " + server_adr.getHostAddress());
 
-            InetAddress serverAdr = InetAddress.getByName("www.google.be");
-            System.out.println("name  = " + serverAdr.getHostAddress());
+            InetAddress server_adr2 = InetAddress.getByName("www.ecam.be");
+            System.out.println("name  = " + server_adr2.getHostAddress());
 
-            InetAddress serverAdr2 = InetAddress.getByName("www.ecam.be");
-            System.out.println("name  = " + serverAdr2.getHostAddress());
-
-            InetAddress[] adrServeurs = InetAddress.getAllByName("www.microsoft.com");
+            InetAddress[] adr_serveurs = InetAddress.getAllByName(
+                    "www.microsoft.com");
 
             System.out.println("Adresses Microsoft : ");
 
-            for (int i = 0; i > adrServeurs.length; i++) {
+            for (int i = 0; i > adr_serveurs.length; i++) {
 
-                System.out.println("     " + adrServeurs[i].getHostAddress());
+                System.out.println("     " + adr_serveurs[i].getHostAddress());
 
             }
 
             // creating a socket server and run it
-            ServerSocket socketServeur = new ServerSocket(port);
+            ServerSocket socket_serveur = new ServerSocket(PORT);
             System.out.println("Lancement du serveur");
 
             //waiting for a input on the port 9632
             while (true) {
-                Socket socketClient = socketServeur.accept();
+                Socket socket_client = socket_serveur.accept();
 
-                System.out.println("Connexion avec : " + socketClient.getInetAddress());
+                System.out.println(
+                        "Connexion avec : " + socket_client.getInetAddress());
 
                 BufferedReader in = new BufferedReader(
-                        new InputStreamReader(socketClient.getInputStream()));
-                PrintStream os = new PrintStream(socketClient.getOutputStream());
+                        new InputStreamReader(socket_client.getInputStream()));
+                PrintStream os = new PrintStream(
+                        socket_client.getOutputStream());
 
                 String message;
 
