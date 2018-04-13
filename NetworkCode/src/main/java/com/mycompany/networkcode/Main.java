@@ -2,10 +2,6 @@ package com.mycompany.networkcode;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 /**
  *
  * @author sonoflight
@@ -19,7 +15,7 @@ public final class Main {
  *
  * @param args
  */
-    public static void main(final String args) {
+    public static void main(final String[] args) {
         try {
             InetAddress local_adr = InetAddress.getLocalHost();
             System.out.println("local address : " + local_adr.getHostAddress());
@@ -46,6 +42,9 @@ public final class Main {
             // creating a socket server and run it
             ServerSocket socket_serveur = new ServerSocket(PORT);
             System.out.println("Lancement du serveur");
+            Thread t = new Thread(new AcceptConnection(socket_serveur));
+            t.start();
+            /*
 
             //waiting for a input on the port 9632
             while (true) {
@@ -64,12 +63,12 @@ public final class Main {
                 while ((message = in.readLine()) != null) {
 
                     System.out.print(message + "\n");
-                    os.println("OK");
-                }
-
-                os.println("Bye!");
-
+            os.println("Well connect!");
+                    os.println("Bye!");
             }
+
+
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
 
