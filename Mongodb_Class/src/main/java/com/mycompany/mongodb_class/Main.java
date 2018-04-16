@@ -30,9 +30,7 @@ public final class Main {
         MongoClient mongo = new MongoClient("localhost", PORT);
         MongoDatabase database = mongo.getDatabase("myDb");
         MongoCollection<Document> collection = database.getCollection("myCollection");
-        
-        database.getName();
-        
+        long count = collection.count();
        
         // creating document db 
         Document doc = new Document("id", 1).append(
