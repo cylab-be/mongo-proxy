@@ -25,8 +25,9 @@ public class Reception implements Runnable {
     @Override
     public final void run() {
         while (true) {
-
+            String msg ;
             try {
+                msg = in.readLine();
                 System.out.println("Msg client :" + in.readLine());
 
             } catch (IOException ex) {

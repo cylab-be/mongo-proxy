@@ -46,6 +46,8 @@ public class AcceptConnection implements Runnable {
                     System.out.println("Votre msg : ");
                     String str = sc.nextLine();
                     out.println(str);
+                    
+                    
                 }
             }
         } catch (IOException ex) {

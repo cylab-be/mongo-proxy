@@ -1,12 +1,10 @@
 package com.mycompany.mongodb_class;
 
-import java.net.Socket;
-import java.net.InetAddress;
-
-import java.io.PrintStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import java.util.Arrays;
+import org.bson.Document;
 
 /**
  *
@@ -26,37 +24,49 @@ public final class Main {
      * @param args the command line arguments
      */
     public static void main(final String[] args) {
-        /**
-         *
-         *
-         * MongoClient mongo = new MongoClient("localhost", PORT_DB);
-         * MongoDatabase database = mongo.getDatabase("myDb");
-         * MongoCollection<Document> collection = database.getCollection(
-         * "stageCollection"); // creating document db Document doc = new
-         * Document( "id", 1).append("Title", "stageAcademique").append(
-         * "personInCharge", new Document("Name", "Debatty").append( "lastName",
-         * "Thibault")) .append("students", Arrays.asList(new Document("Name",
-         * "Kue").append( "lastName", "Guy").append("Project", "Mongo-Proxy"),
-         * new Document( "Name", "Kolawole").append("lastName",
-         * "Abdoulaye").append( "Project", "Laravel"))) .append("Info", new
-         * Document("Duration", Arrays.asList( "03/04/18",
-         * "18/05/18")).append("Hours", "8h/day"));
-         *
-         * //This is done once to document the database //adding the document to
-         * the collection in db collection.insertOne(doc);
-         *
-         */
-        /*
-     mongodbConnect mongodb = new mongodbConnect("myDb");
+        
+         
+        
+        MongoClient mongo = new MongoClient("localhost", PORT);
+        MongoDatabase database = mongo.getDatabase("myDb");
+        MongoCollection<Document> collection = database.getCollection("myCollection");
+        
+        database.getName();
+        
+       
+        // creating document db 
+        Document doc = new Document("id", 1).append(
+                "Title", "stageAcademique").append(
+         "personInCharge", new Document("Name", "Debatty").append( "lastName",
+         "Thibault")) .append("students", Arrays.asList(new Document("Name",
+         "Kue").append( "lastName", "Guy").append("Project", "Mongo-Proxy"),
+         new Document( "Name", "Kolawole").append("lastName",
+         "Abdoulaye").append( "Project", "Laravel"))) .append("Info", new
+         Document("Duration", Arrays.asList( "03/04/18",
+         "18/05/18")).append("Hours", "8h/day"));
+         
+         //This is done once to document the database 
+        //adding the document tothe collection in db 
+        collection.insertOne(doc);
+        
+        
+         
+      /**  
+     MongodbConnect mongodb = new MongodbConnect("myDb");
      //List<Document> documents = new ArrayList<Document>();
      mongodb.viewCollection("stageCollection");
-     mongodb.SearchDoc("Title","Projet");
+     mongodb.searchDoc("Title","Projet");
      mongodb.countDocument("stageCollection");
      mongodb.countDocument("myCollection");
 
-     mongodb.SearchDoc("Title","stageAcademique");
-         */
-        Socket socket;
+     mongodb.searchDoc("Title","stageAcademique");
+     */
+        
+        
+         
+        
+        /**
+         *Socket socket;
 
         try {
             //get server addresse
@@ -71,14 +81,14 @@ public final class Main {
             Thread t = new Thread(new Emission(os));
             t.start();
 
-            /*
+            
         String responseLine;
                 while ((responseLine = is.readLine()) != null) {
                     System.out.println("Server: " + responseLine);
                     if (responseLine.contains("OK\n")) {
                       break;
                     }
-                }*/
+                }
             String msg;
             while ((msg = is.readLine()) != null) {
                 System.out.println(msg);
@@ -89,5 +99,8 @@ public final class Main {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+         */
+
+        
     }
 }
