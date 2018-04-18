@@ -5,11 +5,9 @@
  */
 package com.mycompany.mongowireprotocol;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,42 +17,96 @@ import java.net.Socket;
  */
 public final class Main {
     private static final int PORT = 9632;
-    private static final int PORT_DB = 27017;
+
     private Main() { }
+
     /**
      * @param args the command line arguments
      */
     public static void main(final String[] args) {
         try {
 
-            // Create sockets...
+            // Wait for client connection...
             ServerSocket socket =  new ServerSocket(PORT);
-            Socket client = socket.accept();
-            System.out.println("client connection reussie!");
 
-            InputStreamReader client_in = new InputStreamReader(client.getInputStream());
-            PrintStream client_out = new PrintStream(client.getOutputStream());
+            while (true) {
+                Socket client = socket.accept();
+                System.out.println("Connected");
+                new Thread(new ConnectionHandler(client)).start();
+            }
 
-            // Read from client
-            int lentgh_1 = client_in.read();
-            int lentgh_2 = client_in.read();
-
-            System.out.println("Lengths : " + lentgh_1 + " - " + lentgh_2);
-            //System.out.println("Msg client :" + msg);
-
-            /*Socket srv_socket = new Socket("127.0.0.1", PORT_DB);
-            System.out.println("connection reussie!");
-            PrintWriter srv_out = new PrintWriter(srv_socket.getOutputStream());
-            //srv_out.println(msg);
-            System.out.println("msg envoyé");
-            BufferedReader srv_int = new BufferedReader(
-                        new InputStreamReader(srv_socket.getInputStream()));
-            String db_msg = srv_int.readLine();
-            client_out.println(db_msg);
-            System.out.println("DB msg :" + db_msg);
-            client_out.println(db_msg);*/
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
+        System.out.println("Bye!");
+    }
+}
+
+
+class ConnectionHandler implements Runnable {
+
+    private static final int PORT_DB = 27017;
+
+    private final Socket client;
+
+    public ConnectionHandler(Socket client) {
+        this.client = client;
+    }
+
+    @Override
+    public void run() {
+
+        try {
+            InputStream client_in = client.getInputStream();
+            OutputStream client_out = client.getOutputStream();
+
+            // Connect to server
+            Socket srv_socket = srv_socket = new Socket("127.0.0.1", PORT_DB);
+            OutputStream srv_out = srv_out = srv_socket.getOutputStream();
+            InputStream srv_in = srv_socket.getInputStream();
+
+            while (true) {
+                System.out.println("Read from client...");
+                byte[] msg = readMessage(client_in);
+
+                System.out.println("Write same message to server");
+                srv_out.write(msg);
+
+                System.out.println("Read from server");
+                byte[] response = readMessage(srv_in);
+
+                client_out.write(response);
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    public byte[] readMessage(InputStream stream) throws IOException {
+        // 1. length of message
+        int lentgh_1 = stream.read();
+        int lentgh_2 = stream.read();
+        int lentgh_3 = stream.read();
+        int lentgh_4 = stream.read();
+        int msg_length = lentgh_1 + lentgh_2 * 256 + lentgh_3 * 256 * 256 + lentgh_4 * 256 * 256 * 256;
+        System.out.println("Message length: " + msg_length);
+
+        // 2. content of message
+        byte[] msg = new byte[msg_length];
+        int offset = 4;
+        while (offset < msg_length) {
+            int tmp = stream.read(msg, offset, (msg_length - offset));
+            offset += tmp;
+        }
+
+        // 3. Fill 4 first Bytes
+        msg[0] = (byte) lentgh_1;
+        msg[1] = (byte) lentgh_2;
+        msg[2] = (byte) lentgh_3;
+        msg[3] = (byte) lentgh_4;
+
+        return msg;
     }
 }

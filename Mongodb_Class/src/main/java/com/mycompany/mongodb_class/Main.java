@@ -24,17 +24,19 @@ public final class Main {
      * @param args the command line arguments
      */
     public static void main(final String[] args) {
-        
-         
-        
+
+
+
         MongoClient mongo = new MongoClient("localhost", PORT);
         MongoDatabase database = mongo.getDatabase("myDb");
         MongoCollection<Document> collection = database.getCollection("myCollection");
-        long count = collection.count();
-       
-        // creating document db 
-        Document doc = new Document("id", 1).append(
-                "Title", "stageAcademique").append(
+        System.out.println("Found " + collection.count() + " documents in collection");
+
+        // creating document db
+        Document doc = new Document("id", 1)
+                .append(
+                "Title", "stageAcademique")
+                .append(
          "personInCharge", new Document("Name", "Debatty").append( "lastName",
          "Thibault")) .append("students", Arrays.asList(new Document("Name",
          "Kue").append( "lastName", "Guy").append("Project", "Mongo-Proxy"),
@@ -42,14 +44,14 @@ public final class Main {
          "Abdoulaye").append( "Project", "Laravel"))) .append("Info", new
          Document("Duration", Arrays.asList( "03/04/18",
          "18/05/18")).append("Hours", "8h/day"));
-         
-         //This is done once to document the database 
-        //adding the document tothe collection in db 
+
+         //This is done once to document the database
+        //adding the document tothe collection in db
         collection.insertOne(doc);
-        
-        
-         
-      /**  
+
+
+
+      /**
      MongodbConnect mongodb = new MongodbConnect("myDb");
      //List<Document> documents = new ArrayList<Document>();
      mongodb.viewCollection("stageCollection");
@@ -59,10 +61,10 @@ public final class Main {
 
      mongodb.searchDoc("Title","stageAcademique");
      */
-        
-        
-         
-        
+
+
+
+
         /**
          *Socket socket;
 
@@ -79,7 +81,7 @@ public final class Main {
             Thread t = new Thread(new Emission(os));
             t.start();
 
-            
+
         String responseLine;
                 while ((responseLine = is.readLine()) != null) {
                     System.out.println("Server: " + responseLine);
@@ -99,6 +101,6 @@ public final class Main {
         }
          */
 
-        
+
     }
 }
