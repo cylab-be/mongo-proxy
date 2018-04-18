@@ -26,25 +26,33 @@ public final class Main {
      */
     public static void main(final String[] args) {
         try {
+
+            // Create sockets...
             ServerSocket socket =  new ServerSocket(PORT);
             Socket client = socket.accept();
             System.out.println("client connection reussie!");
-            BufferedReader in = new BufferedReader(
-                        new InputStreamReader(client.getInputStream()));
-            PrintStream db = new PrintStream(client.getOutputStream());
-            String msg = in.readLine();
-            System.out.println("Msg client :" + msg);
-            Socket com = new Socket("127.0.0.1", PORT_DB);
+
+            InputStreamReader client_in = new InputStreamReader(client.getInputStream());
+            PrintStream client_out = new PrintStream(client.getOutputStream());
+
+            // Read from client
+            int lentgh_1 = client_in.read();
+            int lentgh_2 = client_in.read();
+
+            System.out.println("Lengths : " + lentgh_1 + " - " + lentgh_2);
+            //System.out.println("Msg client :" + msg);
+
+            /*Socket srv_socket = new Socket("127.0.0.1", PORT_DB);
             System.out.println("connection reussie!");
-            PrintWriter out = new PrintWriter(com.getOutputStream());
-            out.println(msg);
+            PrintWriter srv_out = new PrintWriter(srv_socket.getOutputStream());
+            //srv_out.println(msg);
             System.out.println("msg envoyé");
-            BufferedReader in_com = new BufferedReader(
-                        new InputStreamReader(com.getInputStream()));
-            String db_msg = in_com.readLine();
-            db.println(db_msg);
+            BufferedReader srv_int = new BufferedReader(
+                        new InputStreamReader(srv_socket.getInputStream()));
+            String db_msg = srv_int.readLine();
+            client_out.println(db_msg);
             System.out.println("DB msg :" + db_msg);
-            db.println(db_msg);
+            client_out.println(db_msg);*/
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
