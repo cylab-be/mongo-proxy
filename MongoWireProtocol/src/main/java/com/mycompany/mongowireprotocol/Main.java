@@ -67,13 +67,23 @@ class ConnectionHandler implements Runnable {
             InputStream srv_in = srv_socket.getInputStream();
 
             while (true) {
-                System.out.println("Read from client...");
+                //System.out.println("Read from client...");
                 byte[] msg = readMessage(client_in);
 
-                System.out.println("Write same message to server");
+                // Get opcode
+                //int opcode = msg[12] + 256 * msg[13] + 256 * 256 * msg[14] + 256*256*256*msg[15];
+                int opcode = (msg[15] << 24) & 0xff000000
+                        | (msg[14] << 16) & 0x00ff0000
+                        | (msg[13] << 8) & 0x0000ff00
+                        | (msg[12] << 0) & 0x000000ff;
+
+                System.out.println("Byte 12 : " + msg[12]);
+                System.out.println("Opcode: " + opcode);
+
+                //System.out.println("Write same message to server");
                 srv_out.write(msg);
 
-                System.out.println("Read from server");
+                //System.out.println("Read from server");
                 byte[] response = readMessage(srv_in);
 
                 client_out.write(response);
@@ -85,12 +95,18 @@ class ConnectionHandler implements Runnable {
     }
 
     public byte[] readMessage(InputStream stream) throws IOException {
+
+        // https://docs.mongodb.com/manual/reference/mongodb-wire-protocol/
+        // Header =
+        // int32 = 4 Bytes = 32 bits
         // 1. length of message
         int lentgh_1 = stream.read();
         int lentgh_2 = stream.read();
         int lentgh_3 = stream.read();
         int lentgh_4 = stream.read();
-        int msg_length = lentgh_1 + lentgh_2 * 256 + lentgh_3 * 256 * 256 + lentgh_4 * 256 * 256 * 256;
+        // Value is little endian:
+        int msg_length = lentgh_1 + lentgh_2 * 256
+                + lentgh_3 * 256 * 256 + lentgh_4 * 256 * 256 * 256;
         System.out.println("Message length: " + msg_length);
 
         // 2. content of message
