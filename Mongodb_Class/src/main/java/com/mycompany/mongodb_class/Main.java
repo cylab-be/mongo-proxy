@@ -29,20 +29,24 @@ public final class Main {
 
         MongoClient mongo = new MongoClient("localhost", PORT);
         MongoDatabase database = mongo.getDatabase("myDb");
-        MongoCollection<Document> collection = database.getCollection("myCollection");
-        System.out.println("Found " + collection.count() + " documents in collection");
+        MongoCollection<Document> collection = database.getCollection(
+                "myCollection");
+        System.out.println(
+                "Found " + collection.count() + " documents in collection");
 
         // creating document db
         Document doc = new Document("id", 1)
                 .append(
-                "Title", "stageAcademique")
+                        "Title", "stageAcademique")
                 .append(
-         "personInCharge", new Document("Name", "Debatty").append( "lastName",
-         "Thibault")) .append("students", Arrays.asList(new Document("Name",
-         "Kue").append( "lastName", "Guy").append("Project", "Mongo-Proxy"),
-         new Document( "Name", "Kolawole").append("lastName",
-         "Abdoulaye").append( "Project", "Laravel"))) .append("Info", new
-         Document("Duration", Arrays.asList( "03/04/18",
+                        "personInCharge", new Document("Name",
+                                "Debatty").append("lastName",
+                                "Thibault")) .append("students", Arrays.asList(
+                                        new Document("Name",
+         "Kue").append("lastName", "Guy").append("Project", "Mongo-Proxy"),
+         new Document("Name", "Kolawole").append("lastName",
+         "Abdoulaye").append("Project", "Laravel"))) .append("Info", new
+         Document("Duration", Arrays.asList("03/04/18",
          "18/05/18")).append("Hours", "8h/day"));
 
          //This is done once to document the database
