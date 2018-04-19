@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,29 +22,32 @@ import static org.junit.Assert.*;
  *
  * @author sonoflight
  */
-public class ConnectionHandlerTest {
-
+public class ConnectionHandlerTest extends TestCase{
+    private ConnectionHandler connectionhandler;
+    private MongoClient mongo;
+    private ServerSocket socket;
+    private Socket client;
     private static final int PORT = 9632;
 
     public ConnectionHandlerTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws IOException {
-
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
     @Before
     public void setUp() throws IOException {
-
-    }
+        //initialize variables
+        mongo = new MongoClient("localhost", PORT);
+        socket = new ServerSocket(PORT);
+        client = socket.accept();
+        connectionhandler = new ConnectionHandler(client);
+   }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException {
+        
+      connectionhandler = null;
+      client.close();
+      socket.close();
+      mongo.close();
     }
 
     /**
@@ -51,9 +55,8 @@ public class ConnectionHandlerTest {
      */
     @org.junit.Test
     public void testRun() {
-        System.out.println("run");
-        ConnectionHandler instance = null;
-        instance.run();
+        System.out.println("run"); 
+        //connectionhandler.run();
     }
 
     /**
@@ -61,18 +64,16 @@ public class ConnectionHandlerTest {
      */
     @org.junit.Test
     public void testReadMessage() throws Exception {
-        MongoClient mongo = new MongoClient("localhost", PORT);
-        ServerSocket socket = new ServerSocket(PORT);
-        Socket client = socket.accept();
-        ConnectionHandler connectionHandler = new ConnectionHandler(client);
+
         InputStream stream = null;
         System.out.println("readMessage");
-
-        byte[] result = connectionHandler.readMessage(stream);
+        
+        //run test
+        byte[] result = connectionhandler.readMessage(stream);
         assertNull("The result most be null ", result);
+        
         stream = client.getInputStream();
-
-        result = connectionHandler.readMessage(stream);
+        result = connectionhandler.readMessage(stream);
         assertNotNull("The result most not be null ", result);
 
     }
