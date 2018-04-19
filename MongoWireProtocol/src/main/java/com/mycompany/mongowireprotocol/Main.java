@@ -127,6 +127,9 @@ class ConnectionHandler implements Runnable {
 
     public byte[] readMessage(final InputStream stream) throws IOException {
 
+        if (stream == null) {
+            System.out.println("no stream detect!");
+        } else {
         // https://docs.mongodb.com/manual/reference/mongodb-wire-protocol/
         // Header =
         // int32 = 4 Bytes = 32 bits
@@ -155,5 +158,7 @@ class ConnectionHandler implements Runnable {
         msg[BYTEPOSITION_3] = (byte) lentgh_4;
 
         return msg;
+        }
+        return null;
     }
 }
