@@ -103,9 +103,36 @@ class ConnectionHandler implements Runnable {
                             | (msg[BYTEPOSITION_14] << BYTEPOSITION_16) & BYTE_3
                             | (msg[BYTEPOSITION_13] << BYTEPOSITION_8) & BYTE_2
                             | (msg[BYTEPOSITION_12] << 0) & BYTE_1;
+                    
+                    //convetion to int by Big Endian order
+                    final int opcode_convestion2 = (int) msg[BYTEPOSITION_15]
+                            + (int) msg[BYTEPOSITION_14] * 256
+                            + (int) msg[BYTEPOSITION_13] * 256 * 256
+                            + (int) msg[BYTEPOSITION_12] * 256 * 256 * 256;
+                    
+                    //convetion to int by Big Endian order
+                    final int opcode_convestion3 = (int) msg[BYTEPOSITION_12]
+                            + (int) msg[BYTEPOSITION_13] * 256
+                            + (int) msg[BYTEPOSITION_14] * 256 * 256
+                            + (int) msg[BYTEPOSITION_15] * 256 * 256 * 256;
+                    
+                    //convet to int by shiting bits
+                    final int msg_lentgh = (msg[BYTEPOSITION_0] << BYTEPOSITION_24) & BYTE_4
+                            | (msg[BYTEPOSITION_1] << BYTEPOSITION_16) & BYTE_3
+                            | (msg[BYTEPOSITION_2] << BYTEPOSITION_8) & BYTE_2
+                            | (msg[BYTEPOSITION_3] << 0) & BYTE_1;
+                    
+                    //convetion to int by Big Endian order
+                    final int msg_length2 = (int) msg[BYTEPOSITION_0]
+                            + (int) msg[BYTEPOSITION_1] * 256
+                            + (int) msg[BYTEPOSITION_2] * 256 * 256
+                            + (int) msg[BYTEPOSITION_3] * 256 * 256 * 256;
 
-                    System.out.println("Byte 12 : " + msg[BYTEPOSITION_12]);
-                    System.out.println("Opcode: " + opcode);
+                    System.out.println("Opcode by shifting bits: " + opcode);
+                    System.out.println("Opcode by Little endian: " + opcode_convestion3);
+                    System.out.println("Opcode by Big endian: " + opcode_convestion2);
+                    System.out.println("length of msg by shifting bits: " + msg_lentgh);
+                    System.out.println("length of msg by Little endian:" + msg_length2);
 
                     //System.out.println("Write same message to server");
                     srv_out.write(msg);
@@ -143,6 +170,7 @@ class ConnectionHandler implements Runnable {
             byte[] msg = new byte[msg_length];
             int offset = BYTEPOSITION_4;
             while (offset < msg_length) {
+                //read the stream and skip the 4 first bytes
                 int tmp = stream.read(msg, offset, (msg_length - offset));
                 offset += tmp;
             }

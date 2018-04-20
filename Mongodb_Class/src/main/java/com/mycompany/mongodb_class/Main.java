@@ -31,6 +31,10 @@ public final class Main {
         MongoDatabase database = mongo.getDatabase("myDb");
         MongoCollection<Document> collection = database.getCollection(
                 "myCollection");
+        
+        /**
+        MongoCollection<Document> collection = database.getCollection(
+                "myCollection");
         System.out.println(
                 "Found " + collection.count() + " documents in collection");
 
@@ -48,10 +52,11 @@ public final class Main {
          "Abdoulaye").append("Project", "Laravel"))) .append("Info", new
          Document("Duration", Arrays.asList("03/04/18",
          "18/05/18")).append("Hours", "8h/day"));
+         */
 
          //This is done once to document the database
         //adding the document tothe collection in db
-        collection.insertOne(doc);
+        //collection.insertOne(doc);
 
 
 
