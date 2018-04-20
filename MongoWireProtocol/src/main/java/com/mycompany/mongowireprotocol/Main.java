@@ -133,6 +133,45 @@ class ConnectionHandler implements Runnable {
                     System.out.println("Opcode by Big endian: " + opcode_convestion2);
                     System.out.println("length of msg by shifting bits: " + msg_lentgh);
                     System.out.println("length of msg by Little endian:" + msg_length2);
+                    
+                    //view of type of request
+                    switch (opcode) {
+                        case 1:
+                            System.out.println("OP_REPLY");
+                            break;
+                        case 2001:
+                            System.out.println("OP_UPDATE");
+                            break;
+                        case 2002:
+                             System.out.println("OP_INSERT");
+                            break;
+                        case 2003:
+                             System.out.println("RESERVED");
+                            break;
+                        case 2004: 
+                             System.out.println("OP_QUERY");
+                            break;
+                        case 2005: 
+                             System.out.println("OP_GET_MORE");
+                            break;
+                        case 2006:   System.out.println("OP_DELETE");
+                            break;  
+                        case 2007: 
+                             System.out.println("OP_KILL_CURSORS");
+                            break;
+                        case 2010: 
+                             System.out.println("OP_COMMAND");
+                            break;
+                        case 2011:  
+                             System.out.println("OP_COMMANDREPLY");
+                            break;
+                        case 2013:
+                             System.out.println("OP_MSG");
+                            break;
+                        default:
+                            System.out.println("request unknown!");
+                            
+                    }
 
                     //System.out.println("Write same message to server");
                     srv_out.write(msg);

@@ -16,13 +16,14 @@ import com.mongodb.client.model.Filters;
 public class MongodbConnect {
 
     private MongoDatabase database;
+    private static final int PORT = 9632;
 
     /**
      * @param dbname the db name
      */
     public MongodbConnect(final String dbname) {
 
-        MongoClient mongo = new MongoClient("localhost");
+        MongoClient mongo = new MongoClient("localhost", PORT);
         this.database = mongo.getDatabase(dbname);
 
     }
