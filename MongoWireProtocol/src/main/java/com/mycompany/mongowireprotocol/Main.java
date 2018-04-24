@@ -68,6 +68,7 @@ class ConnectionHandler implements Runnable {
     private static final int BYTEPOSITION_8 = 8;
     private static final int BYTEPOSITION_16 = 16;
     private static final int BYTEPOSITION_24 = 24;
+    private static final int BYTEPOSITION_20 = 20;
 
     private static final int BYTE_1 = 0x000000ff;
     private static final int BYTE_2 = 0x0000ff00;
@@ -103,19 +104,13 @@ class ConnectionHandler implements Runnable {
                             + (int) msg[BYTEPOSITION_1] * 256
                             + (int) msg[BYTEPOSITION_2] * 256 * 256
                             + (int) msg[BYTEPOSITION_3] * 256 * 256 * 256;
-
-                    char[] string_msg = new char[msg_length2];
-                    int i;
-                    for(i=0 ; i <= msg_length2; i++ ) {
-                    string_msg[i] = (char)msg[i];}
-                    System.out.println(string_msg);
                     //Get opcode
                     //consersion of 4bytes to a single int
                     final int opcode = (msg[BYTEPOSITION_15] << BYTEPOSITION_24) & BYTE_4
                             | (msg[BYTEPOSITION_14] << BYTEPOSITION_16) & BYTE_3
                             | (msg[BYTEPOSITION_13] << BYTEPOSITION_8) & BYTE_2
                             | (msg[BYTEPOSITION_12] << 0) & BYTE_1;
-                    
+                     
                     //convetion to int by Big Endian order
                     final int opcode_convestion2 = (int) msg[BYTEPOSITION_15]
                             + (int) msg[BYTEPOSITION_14] * 256
@@ -139,7 +134,14 @@ class ConnectionHandler implements Runnable {
                     System.out.println("Opcode by Big endian: " + opcode_convestion2);
                     System.out.println("length of msg by shifting bits: " + msg_lentgh);
                     System.out.println("length of msg by Little endian:" + msg_length2);
-                    
+  
+
+                    //System.out.println("Write same message to server");
+                    srv_out.write(msg);
+
+                    //System.out.println("Read from server");
+                    byte[] response = readMessage(srv_in);
+                                      
                     //view of type of request
                     switch (opcode) {
                         case 1:
@@ -156,6 +158,10 @@ class ConnectionHandler implements Runnable {
                             break;
                         case 2004: 
                              System.out.println("OP_QUERY");
+                             
+                             Thread t = new Thread(new ExtractMsg(msg));
+                             t.start();
+                             
                             break;
                         case 2005: 
                              System.out.println("OP_GET_MORE");
@@ -178,12 +184,6 @@ class ConnectionHandler implements Runnable {
                             System.out.println("request unknown!");
                             
                     }
-
-                    //System.out.println("Write same message to server");
-                    srv_out.write(msg);
-
-                    //System.out.println("Read from server");
-                    byte[] response = readMessage(srv_in);
 
                     client_out.write(response);
                 }
