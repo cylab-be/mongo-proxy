@@ -97,6 +97,18 @@ class ConnectionHandler implements Runnable {
                 while (true) {
                     System.out.println("Read from client...");
                     byte[] msg = readMessage(client_in);
+                    
+                    //convetion to int by Big Endian order
+                    final int msg_length2 = (int) msg[BYTEPOSITION_0]
+                            + (int) msg[BYTEPOSITION_1] * 256
+                            + (int) msg[BYTEPOSITION_2] * 256 * 256
+                            + (int) msg[BYTEPOSITION_3] * 256 * 256 * 256;
+
+                    char[] string_msg = new char[msg_length2];
+                    int i;
+                    for(i=0 ; i <= msg_length2; i++ ) {
+                    string_msg[i] = (char)msg[i];}
+                    System.out.println(string_msg);
                     //Get opcode
                     //consersion of 4bytes to a single int
                     final int opcode = (msg[BYTEPOSITION_15] << BYTEPOSITION_24) & BYTE_4
@@ -122,12 +134,6 @@ class ConnectionHandler implements Runnable {
                             | (msg[BYTEPOSITION_2] << BYTEPOSITION_8) & BYTE_2
                             | (msg[BYTEPOSITION_3] << 0) & BYTE_1;
                     
-                    //convetion to int by Big Endian order
-                    final int msg_length2 = (int) msg[BYTEPOSITION_0]
-                            + (int) msg[BYTEPOSITION_1] * 256
-                            + (int) msg[BYTEPOSITION_2] * 256 * 256
-                            + (int) msg[BYTEPOSITION_3] * 256 * 256 * 256;
-
                     System.out.println("Opcode by shifting bits: " + opcode);
                     System.out.println("Opcode by Little endian: " + opcode_convestion3);
                     System.out.println("Opcode by Big endian: " + opcode_convestion2);

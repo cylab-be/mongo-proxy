@@ -64,22 +64,6 @@ public final class Main {
         //adding the document tothe collection in db
         //collection.insertOne(doc);
 
-
-
-      /**
-     MongodbConnect mongodb = new MongodbConnect("myDb");
-     //List<Document> documents = new ArrayList<Document>();
-     mongodb.viewCollection("stageCollection");
-     mongodb.searchDoc("Title","Projet");
-     mongodb.countDocument("stageCollection");
-     mongodb.countDocument("myCollection");
-
-     mongodb.searchDoc("Title","stageAcademique");
-     */
-
-
-
-
         /**
          *Socket socket;
 
