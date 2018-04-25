@@ -98,7 +98,7 @@ class ConnectionHandler implements Runnable {
                 while (true) {
                     System.out.println("Read from client...");
                     byte[] msg = readMessage(client_in);
-                    
+
                     //convetion to int by Big Endian order
                     final int msg_length2 = (int) msg[BYTEPOSITION_0]
                             + (int) msg[BYTEPOSITION_1] * 256
@@ -110,38 +110,37 @@ class ConnectionHandler implements Runnable {
                             | (msg[BYTEPOSITION_14] << BYTEPOSITION_16) & BYTE_3
                             | (msg[BYTEPOSITION_13] << BYTEPOSITION_8) & BYTE_2
                             | (msg[BYTEPOSITION_12] << 0) & BYTE_1;
-                     
+
                     //convetion to int by Big Endian order
                     final int opcode_convestion2 = (int) msg[BYTEPOSITION_15]
                             + (int) msg[BYTEPOSITION_14] * 256
                             + (int) msg[BYTEPOSITION_13] * 256 * 256
                             + (int) msg[BYTEPOSITION_12] * 256 * 256 * 256;
-                    
+
                     //convetion to int by Big Endian order
                     final int opcode_convestion3 = (int) msg[BYTEPOSITION_12]
                             + (int) msg[BYTEPOSITION_13] * 256
                             + (int) msg[BYTEPOSITION_14] * 256 * 256
                             + (int) msg[BYTEPOSITION_15] * 256 * 256 * 256;
-                    
+
                     //convet to int by shiting bits
                     final int msg_lentgh = (msg[BYTEPOSITION_0] << BYTEPOSITION_24) & BYTE_4
                             | (msg[BYTEPOSITION_1] << BYTEPOSITION_16) & BYTE_3
                             | (msg[BYTEPOSITION_2] << BYTEPOSITION_8) & BYTE_2
                             | (msg[BYTEPOSITION_3] << 0) & BYTE_1;
-                    
+
                     System.out.println("Opcode by shifting bits: " + opcode);
                     System.out.println("Opcode by Little endian: " + opcode_convestion3);
                     System.out.println("Opcode by Big endian: " + opcode_convestion2);
                     System.out.println("length of msg by shifting bits: " + msg_lentgh);
                     System.out.println("length of msg by Little endian:" + msg_length2);
-  
 
                     //System.out.println("Write same message to server");
                     srv_out.write(msg);
 
                     //System.out.println("Read from server");
                     byte[] response = readMessage(srv_in);
-                                      
+
                     //view of type of request
                     switch (opcode) {
                         case 1:
@@ -151,38 +150,38 @@ class ConnectionHandler implements Runnable {
                             System.out.println("OP_UPDATE");
                             break;
                         case 2002:
-                             System.out.println("OP_INSERT");
+                            System.out.println("OP_INSERT");
                             break;
                         case 2003:
-                             System.out.println("RESERVED");
+                            System.out.println("RESERVED");
                             break;
-                        case 2004: 
-                             System.out.println("OP_QUERY");
-                             
-                             Thread t = new Thread(new ExtractMsg(msg));
-                             t.start();
-                             
+                        case 2004:
+                            System.out.println("OP_QUERY");
+
+                            Thread t = new Thread(new ExtractMsg(msg));
+                            t.start();
                             break;
-                        case 2005: 
-                             System.out.println("OP_GET_MORE");
+                        case 2005:
+                            System.out.println("OP_GET_MORE");
                             break;
-                        case 2006:   System.out.println("OP_DELETE");
-                            break;  
-                        case 2007: 
-                             System.out.println("OP_KILL_CURSORS");
+                        case 2006:
+                            System.out.println("OP_DELETE");
                             break;
-                        case 2010: 
-                             System.out.println("OP_COMMAND");
+                        case 2007:
+                            System.out.println("OP_KILL_CURSORS");
                             break;
-                        case 2011:  
-                             System.out.println("OP_COMMANDREPLY");
+                        case 2010:
+                            System.out.println("OP_COMMAND");
+                            break;
+                        case 2011:
+                            System.out.println("OP_COMMANDREPLY");
                             break;
                         case 2013:
-                             System.out.println("OP_MSG");
+                            System.out.println("OP_MSG");
                             break;
                         default:
                             System.out.println("request unknown!");
-                            
+
                     }
 
                     client_out.write(response);
