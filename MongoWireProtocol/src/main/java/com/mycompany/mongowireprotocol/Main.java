@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  *
@@ -52,181 +54,190 @@ class ConnectionHandler implements Runnable {
 
     private static final int PORT_DB = 27017;
 
-    //declaration of numbers used for spacifie byte position in msg
-    private static final int BYTEPOSITION_12 = 12;
-    private static final int BYTEPOSITION_13 = 13;
-    private static final int BYTEPOSITION_14 = 14;
-    private static final int BYTEPOSITION_15 = 15;
-    private static final int BYTEPOSITION_0 = 0;
-    private static final int BYTEPOSITION_1 = 1;
-    private static final int BYTEPOSITION_2 = 2;
-    private static final int BYTEPOSITION_3 = 3;
-    private static final int BYTEPOSITION_4 = 4;
-    private static final int BYTEPOSITION_5 = 5;
-    private static final int BYTEPOSITION_6 = 6;
-    private static final int BYTEPOSITION_7 = 7;
-    private static final int BYTEPOSITION_8 = 8;
-    private static final int BYTEPOSITION_16 = 16;
-    private static final int BYTEPOSITION_24 = 24;
-    private static final int BYTEPOSITION_20 = 20;
-
-    private static final int BYTE_1 = 0x000000ff;
-    private static final int BYTE_2 = 0x0000ff00;
-    private static final int BYTE_3 = 0x00ff0000;
-    private static final int BYTE_4 = 0xff000000;
-
     private final Socket client;
 
     ConnectionHandler(final Socket client) {
         this.client = client;
+        opcodes.put(1, "OP_REPLY");
+        /** ... */
     }
+
+    private final HashMap<Integer, String> opcodes = new HashMap<>();
+
 
     @Override
     public final void run() {
-        if (new ConnectionHandler(client) == null) {
-        } else {
 
-            try {
-                InputStream client_in = client.getInputStream();
-                OutputStream client_out = client.getOutputStream();
+        try {
+            InputStream client_in = client.getInputStream();
+            OutputStream client_out = client.getOutputStream();
 
-                // Connect to server
-                Socket srv_socket = new Socket("127.0.0.1", PORT_DB);
-                OutputStream srv_out = srv_socket.getOutputStream();
-                InputStream srv_in = srv_socket.getInputStream();
+            // Connect to server
+            Socket srv_socket = new Socket("127.0.0.1", PORT_DB);
+            OutputStream srv_out = srv_socket.getOutputStream();
+            InputStream srv_in = srv_socket.getInputStream();
 
-                while (true) {
-                    System.out.println("Read from client...");
-                    byte[] msg = readMessage(client_in);
+            while (true) {
+                System.out.println("Read from client...");
+                byte[] msg = readMessage(client_in);
 
-                    //convetion to int by Big Endian order
-                    final int msg_length2 = (int) msg[BYTEPOSITION_0]
-                            + (int) msg[BYTEPOSITION_1] * 256
-                            + (int) msg[BYTEPOSITION_2] * 256 * 256
-                            + (int) msg[BYTEPOSITION_3] * 256 * 256 * 256;
-                    //Get opcode
-                    //consersion of 4bytes to a single int
-                    final int opcode = (msg[BYTEPOSITION_15] << BYTEPOSITION_24) & BYTE_4
-                            | (msg[BYTEPOSITION_14] << BYTEPOSITION_16) & BYTE_3
-                            | (msg[BYTEPOSITION_13] << BYTEPOSITION_8) & BYTE_2
-                            | (msg[BYTEPOSITION_12] << 0) & BYTE_1;
+                //Get opcode
+                //consersion of 4bytes to a single int
+                final int opcode = (msg[15] << 24) & 0xff000000
+                        | (msg[14] << 16) & 0x00ff0000
+                        | (msg[13] << 8) & 0x0000ff00
+                        | (msg[12]) & 0x000000ff;
 
-                    //convetion to int by Big Endian order
-                    final int opcode_convestion2 = (int) msg[BYTEPOSITION_15]
-                            + (int) msg[BYTEPOSITION_14] * 256
-                            + (int) msg[BYTEPOSITION_13] * 256 * 256
-                            + (int) msg[BYTEPOSITION_12] * 256 * 256 * 256;
 
-                    //convetion to int by Big Endian order
-                    final int opcode_convestion3 = (int) msg[BYTEPOSITION_12]
-                            + (int) msg[BYTEPOSITION_13] * 256
-                            + (int) msg[BYTEPOSITION_14] * 256 * 256
-                            + (int) msg[BYTEPOSITION_15] * 256 * 256 * 256;
+                System.out.println("Opcode: " + opcode);
 
-                    //convet to int by shiting bits
-                    final int msg_lentgh = (msg[BYTEPOSITION_0] << BYTEPOSITION_24) & BYTE_4
-                            | (msg[BYTEPOSITION_1] << BYTEPOSITION_16) & BYTE_3
-                            | (msg[BYTEPOSITION_2] << BYTEPOSITION_8) & BYTE_2
-                            | (msg[BYTEPOSITION_3] << 0) & BYTE_1;
+                //System.out.println("Write same message to server");
+                srv_out.write(msg);
 
-                    System.out.println("Opcode by shifting bits: " + opcode);
-                    System.out.println("Opcode by Little endian: " + opcode_convestion3);
-                    System.out.println("Opcode by Big endian: " + opcode_convestion2);
-                    System.out.println("length of msg by shifting bits: " + msg_lentgh);
-                    System.out.println("length of msg by Little endian:" + msg_length2);
+                //System.out.println("Read from server");
+                byte[] response = readMessage(srv_in);
 
-                    //System.out.println("Write same message to server");
-                    srv_out.write(msg);
+                // String op = opcodes.get(opcode);
+                // System.out.println(op);
 
-                    //System.out.println("Read from server");
-                    byte[] response = readMessage(srv_in);
-
-                    //view of type of request
-                    switch (opcode) {
-                        case 1:
-                            System.out.println("OP_REPLY");
-                            break;
-                        case 2001:
-                            System.out.println("OP_UPDATE");
-                            break;
-                        case 2002:
-                            System.out.println("OP_INSERT");
-                            break;
-                        case 2003:
-                            System.out.println("RESERVED");
-                            break;
-                        case 2004:
-                            System.out.println("OP_QUERY");
-
-                            Thread t = new Thread(new ExtractMsg(msg));
-                            t.start();
-                            break;
-                        case 2005:
-                            System.out.println("OP_GET_MORE");
-                            break;
-                        case 2006:
-                            System.out.println("OP_DELETE");
-                            break;
-                        case 2007:
-                            System.out.println("OP_KILL_CURSORS");
-                            break;
-                        case 2010:
-                            System.out.println("OP_COMMAND");
-                            break;
-                        case 2011:
-                            System.out.println("OP_COMMANDREPLY");
-                            break;
-                        case 2013:
-                            System.out.println("OP_MSG");
-                            break;
-                        default:
-                            System.out.println("request unknown!");
-
-                    }
-
-                    client_out.write(response);
+                // QUERY
+                if (opcode == 2004) {
+                    extractMsg(msg);
                 }
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
+
+
+                //view of type of request
+                switch (opcode) {
+                    case 1:
+                        System.out.println("OP_REPLY");
+                        break;
+                    case 2001:
+                        System.out.println("OP_UPDATE");
+                        break;
+                    case 2002:
+                        System.out.println("OP_INSERT");
+                        break;
+                    case 2003:
+                        System.out.println("RESERVED");
+                        break;
+                    case 2004:
+                        System.out.println("OP_QUERY");
+
+                        break;
+                    case 2005:
+                        System.out.println("OP_GET_MORE");
+                        break;
+                    case 2006:
+                        System.out.println("OP_DELETE");
+                        break;
+                    case 2007:
+                        System.out.println("OP_KILL_CURSORS");
+                        break;
+                    case 2010:
+                        System.out.println("OP_COMMAND");
+                        break;
+                    case 2011:
+                        System.out.println("OP_COMMANDREPLY");
+                        break;
+                    case 2013:
+                        System.out.println("OP_MSG");
+                        break;
+                    default:
+                        System.out.println("request unknown!");
+
+                }
+
+                client_out.write(response);
             }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
-    public byte[] readMessage(final InputStream stream) throws IOException {
+    public void extractMsg(final byte[] msg) {
+
+        //Determination of the length of the collection
+        //name in the OP_QUERY msg
+        int i = 20; //start position of cstring
+        char t = 0x00;
+        while (msg[i] != t) {
+            System.out.println((char) msg[i]);
+
+            i++;
+        }
+
+        int name_collection_length = i - 20;
+
+        int l = 0;
+
+        char[] name_collection = new char[name_collection_length];
+
+        System.out.println("Create msg");
+
+        while (l < name_collection_length) {
+            name_collection[l] = (char) msg[20 + l];
+            l++;
+        }
+
+        System.out.println("collection name : "
+                + Arrays.toString(name_collection));
+        System.out.println("End of name collection extract.");
+
+        //Get documcument in msg
+        System.out.println("extract document...");
+        int j = 20 + name_collection_length + 8; //start position of Document
+
+        final int document_lenght = (msg[j + 3] << 24) & 0xff000000
+                | (msg[j + 2] << 16) & 0x00ff0000
+                | (msg[j + 1] << 8) & 0x0000ff00
+                | (msg[j]) & 0x000000ff;
+        System.out.println("lenght document : " + document_lenght);
+        byte[] document = new byte[document_lenght];
+        int k;
+        for (k = 0; k < document_lenght; k++) {
+            document[0] = msg[j + k];
+        }
+        String doc = Arrays.toString(document);
+        System.out.append("document : " + doc);
+
+    }
+
+    public byte[] readMessage(final InputStream stream)
+            throws IOException, Exception {
 
         if (stream == null) {
-            System.out.println("no stream detect!");
-        } else {
-            // https://docs.mongodb.com/manual/reference/mongodb-wire-protocol/
-            // Header =
-            // int32 = 4 Bytes = 32 bits
-            // 1. length of message
-            int lentgh_1 = stream.read();
-            int lentgh_2 = stream.read();
-            int lentgh_3 = stream.read();
-            int lentgh_4 = stream.read();
-            // Value is little endian:
-            final int msg_length = lentgh_1 + lentgh_2 * 256
-                    + lentgh_3 * 256 * 256 + lentgh_4 * 256 * 256 * 256;
-            System.out.println("Message length: " + msg_length);
-
-            // 2. content of message
-            byte[] msg = new byte[msg_length];
-            int offset = BYTEPOSITION_4;
-            while (offset < msg_length) {
-                //read the stream and skip the 4 first bytes
-                int tmp = stream.read(msg, offset, (msg_length - offset));
-                offset += tmp;
-            }
-
-            // 3. Fill 4 first Bytes
-            msg[BYTEPOSITION_0] = (byte) lentgh_1;
-            msg[BYTEPOSITION_1] = (byte) lentgh_2;
-            msg[BYTEPOSITION_2] = (byte) lentgh_3;
-            msg[BYTEPOSITION_3] = (byte) lentgh_4;
-
-            return msg;
+            throw new Exception("Stream is null!");
         }
-        return null;
+
+
+        // https://docs.mongodb.com/manual/reference/mongodb-wire-protocol/
+        // Header =
+        // int32 = 4 Bytes = 32 bits
+        // 1. length of message
+        int lentgh_1 = stream.read();
+        int lentgh_2 = stream.read();
+        int lentgh_3 = stream.read();
+        int lentgh_4 = stream.read();
+        // Value is little endian:
+        final int msg_length = lentgh_1 + lentgh_2 * 256
+                + lentgh_3 * 256 * 256 + lentgh_4 * 256 * 256 * 256;
+        System.out.println("Message length: " + msg_length);
+
+        // 2. content of message
+        byte[] msg = new byte[msg_length];
+        int offset = 4;
+        while (offset < msg_length) {
+            //read the stream and skip the 4 first bytes
+            int tmp = stream.read(msg, offset, (msg_length - offset));
+            offset += tmp;
+        }
+
+        // 3. Fill 4 first Bytes
+        msg[0] = (byte) lentgh_1;
+        msg[1] = (byte) lentgh_2;
+        msg[2] = (byte) lentgh_3;
+        msg[3] = (byte) lentgh_4;
+
+        return msg;
     }
 }
