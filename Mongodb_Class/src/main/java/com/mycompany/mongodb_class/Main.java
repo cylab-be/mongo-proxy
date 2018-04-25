@@ -24,23 +24,20 @@ public final class Main {
      * @param args the command line arguments
      */
     public static void main(final String[] args) {
-        
-        MongodbConnect mongodb = new MongodbConnect("myDb");
+
+        /*MongodbConnect mongodb = new MongodbConnect("myDb");
         mongodb.countDocument("stageCollection");
         mongodb.searchDoc("Title","Projet");
         mongodb.viewCollection("stageCollection");
+*/
 
 
 
-        /**
         MongoClient mongo = new MongoClient("localhost", PORT);
         MongoDatabase database = mongo.getDatabase("myDb");
         MongoCollection<Document> collection = database.getCollection(
                 "myCollection");
-        
-        /**
-        MongoCollection<Document> collection = database.getCollection(
-                "myCollection");
+
         System.out.println(
                 "Found " + collection.count() + " documents in collection");
 
@@ -58,11 +55,14 @@ public final class Main {
          "Abdoulaye").append("Project", "Laravel"))) .append("Info", new
          Document("Duration", Arrays.asList("03/04/18",
          "18/05/18")).append("Hours", "8h/day"));
-         */
+
 
          //This is done once to document the database
         //adding the document tothe collection in db
-        //collection.insertOne(doc);
+        collection.insertOne(doc);
+
+        System.out.println(
+                "Found " + collection.count() + " documents in collection");
 
         /**
          *Socket socket;

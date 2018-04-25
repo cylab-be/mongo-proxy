@@ -81,15 +81,15 @@ class ConnectionHandler implements Runnable {
                 System.out.println("Read from client...");
                 byte[] msg = readMessage(client_in);
 
-                //Get opcode
-                //consersion of 4bytes to a single int
-                final int opcode = (msg[15] << 24) & 0xff000000
-                        | (msg[14] << 16) & 0x00ff0000
-                        | (msg[13] << 8) & 0x0000ff00
-                        | (msg[12]) & 0x000000ff;
-
-
+                int opcode = convert(msg, 12);
                 System.out.println("Opcode: " + opcode);
+                if (opcode == 2004) {
+                    processQuery(msg);
+                }
+
+                if (opcode == 2002) {
+                    processInsert(msg);
+                }
 
                 //System.out.println("Write same message to server");
                 srv_out.write(msg);
@@ -99,11 +99,6 @@ class ConnectionHandler implements Runnable {
 
                 // String op = opcodes.get(opcode);
                 // System.out.println(op);
-
-                // QUERY
-                if (opcode == 2004) {
-                    extractMsg(msg);
-                }
 
 
                 //view of type of request
@@ -154,43 +149,39 @@ class ConnectionHandler implements Runnable {
         }
     }
 
-    public void extractMsg(final byte[] msg) {
+    public static final char STRING_TERMINATION = 0x00;
 
-        //Determination of the length of the collection
-        //name in the OP_QUERY msg
-        int i = 20; //start position of cstring
-        char t = 0x00;
-        while (msg[i] != t) {
-            System.out.println((char) msg[i]);
-
+    /**
+     * Read a string from the byte array.
+     * @param msg
+     * @param start
+     * @return
+     */
+    public static String readString(final byte[] msg, final int start) {
+        StringBuilder string = new StringBuilder();
+        int i = start;
+         while (msg[i] != STRING_TERMINATION) {
+            string.append((char) msg[i]);
             i++;
         }
 
-        int name_collection_length = i - 20;
+        return string.toString();
+    }
 
-        int l = 0;
+    public void processQuery(final byte[] msg) {
 
-        char[] name_collection = new char[name_collection_length];
+        String collection = readString(msg, 20);
+        System.out.println(collection);
 
-        System.out.println("Create msg");
+        int document_length = convert(msg, 29 + collection.length());
+        System.out.println("Document length: " + document_length);
 
-        while (l < name_collection_length) {
-            name_collection[l] = (char) msg[20 + l];
-            l++;
-        }
 
-        System.out.println("collection name : "
-                + Arrays.toString(name_collection));
-        System.out.println("End of name collection extract.");
-
-        //Get documcument in msg
-        System.out.println("extract document...");
+        //Get document in msg
+        /*System.out.println("extract document...");
         int j = 20 + name_collection_length + 8; //start position of Document
 
-        final int document_lenght = (msg[j + 3] << 24) & 0xff000000
-                | (msg[j + 2] << 16) & 0x00ff0000
-                | (msg[j + 1] << 8) & 0x0000ff00
-                | (msg[j]) & 0x000000ff;
+        final int document_lenght = convert(msg, j);
         System.out.println("lenght document : " + document_lenght);
         byte[] document = new byte[document_lenght];
         int k;
@@ -198,10 +189,17 @@ class ConnectionHandler implements Runnable {
             document[0] = msg[j + k];
         }
         String doc = Arrays.toString(document);
-        System.out.append("document : " + doc);
+        System.out.append("document : " + doc);*/
 
     }
 
+    /**
+     * Read the complete message to a Byte array.
+     * @param stream
+     * @return
+     * @throws IOException
+     * @throws Exception
+     */
     public byte[] readMessage(final InputStream stream)
             throws IOException, Exception {
 
@@ -239,5 +237,23 @@ class ConnectionHandler implements Runnable {
         msg[3] = (byte) lentgh_4;
 
         return msg;
+    }
+
+    /**
+     * Consersion of 4bytes to a single int.
+     * @param bytes
+     * @param start
+     * @return
+     */
+    protected static int convert(final byte[] bytes, final int start) {
+
+        return (bytes[start + 3] << 24) & 0xff000000
+                        | (bytes[start + 2] << 16) & 0x00ff0000
+                        | (bytes[start + 1] << 8) & 0x0000ff00
+                        | (bytes[start]) & 0x000000ff;
+    }
+
+    protected void processInsert(final byte[] msg) {
+
     }
 }
