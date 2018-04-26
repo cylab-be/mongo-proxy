@@ -104,8 +104,9 @@ class ConnectionHandler implements Runnable {
                 System.out.println("Read from client...");
                 byte[] msg = readMessage(client_in);
 
-                int opcode = convert(msg, 12);
-                System.out.println("Opcode: " + opcode);
+                int opcode = readInt(msg, 12);
+                System.out.println("Opcode: " + getOpcodeName(opcode));
+
                 if (opcode == 2004) {
                     processQuery(msg);
                 }
@@ -120,54 +121,55 @@ class ConnectionHandler implements Runnable {
                 //System.out.println("Read from server");
                 byte[] response = readMessage(srv_in);
 
-                // String op = opcodes.get(opcode);
-                // System.out.println(op);
-                //view of type of request
-                switch (opcode) {
-                    case 1:
-                        System.out.println("OP_REPLY");
-                        break;
-                    case 2001:
-                        System.out.println("OP_UPDATE");
-                        break;
-                    case 2002:
-                        System.out.println("OP_INSERT");
-                        break;
-                    case 2003:
-                        System.out.println("RESERVED");
-                        break;
-                    case 2004:
-                        System.out.println("OP_QUERY");
-
-                        break;
-                    case 2005:
-                        System.out.println("OP_GET_MORE");
-                        break;
-                    case 2006:
-                        System.out.println("OP_DELETE");
-                        break;
-                    case 2007:
-                        System.out.println("OP_KILL_CURSORS");
-                        break;
-                    case 2010:
-                        System.out.println("OP_COMMAND");
-                        break;
-                    case 2011:
-                        System.out.println("OP_COMMANDREPLY");
-                        break;
-                    case 2013:
-                        System.out.println("OP_MSG");
-                        break;
-                    default:
-                        System.out.println("request unknown!");
-
-                }
-
                 client_out.write(response);
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    public String getOpcodeName(final int opcode) {
+        // String op = opcodes.get(opcode);
+        // System.out.println(op);
+        //view of type of request
+        switch (opcode) {
+            case 1:
+                return "OP_REPLY";
+
+            case 2001:
+                return "OP_UPDATE";
+
+            case 2002:
+                return "OP_INSERT";
+
+            case 2003:
+                return "RESERVED";
+
+            case 2004:
+                return "OP_QUERY";
+
+            case 2005:
+                return "OP_GET_MORE";
+
+            case 2006:
+                return "OP_DELETE";
+
+            case 2007:
+                return "OP_KILL_CURSORS";
+
+            case 2010:
+                return "OP_COMMAND";
+
+            case 2011:
+                return "OP_COMMANDREPLY";
+
+            case 2013:
+                return "OP_MSG";
+
+            default:
+                return "Unknown";
+        }
+
     }
 
     public static final char STRING_TERMINATION = 0x00;
@@ -179,7 +181,7 @@ class ConnectionHandler implements Runnable {
      * @param start
      * @return
      */
-    public static String readString(final byte[] msg, final int start) {
+    public static String readCString(final byte[] msg, final int start) {
         StringBuilder string = new StringBuilder();
         int i = start;
         while (msg[i] != STRING_TERMINATION) {
@@ -190,15 +192,21 @@ class ConnectionHandler implements Runnable {
         return string.toString();
     }
 
+    public static String readString(final byte[] msg, final int start) {
+        return readCString(msg, start + 4);
+    }
+
     public void processQuery(final byte[] msg) {
 
-        String collection = readString(msg, 20);
+        String collection = readCString(msg, 20);
         System.out.println(collection);
 
-        int document_length = convert(msg, 29 + collection.length());
-        System.out.println("Document length: " + document_length);
+        Document doc = new Document(msg, 29 + collection.length());
+        System.out.println(doc);
+
 
         //extract the document
+        /*
         byte[] document = new byte[document_length];
         int i = 0;
         while (i < document_length) {
@@ -254,7 +262,7 @@ class ConnectionHandler implements Runnable {
         // Value is little endian:
         final int msg_length = lentgh_1 + lentgh_2 * 256
                 + lentgh_3 * 256 * 256 + lentgh_4 * 256 * 256 * 256;
-        System.out.println("Message length: " + msg_length);
+        //System.out.println("Message length: " + msg_length);
 
         // 2. content of message
         byte[] msg = new byte[msg_length];
@@ -281,7 +289,7 @@ class ConnectionHandler implements Runnable {
      * @param start
      * @return
      */
-    protected static int convert(final byte[] bytes, final int start) {
+    protected static int readInt(final byte[] bytes, final int start) {
 
         return (bytes[start + 3] << 24) & 0xff000000
                 | (bytes[start + 2] << 16) & 0x00ff0000
