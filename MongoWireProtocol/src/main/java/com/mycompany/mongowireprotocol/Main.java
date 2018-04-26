@@ -12,6 +12,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.HashMap;
+import org.bson.BSON;
+import org.bson.BsonDocument;
 
 /**
  *
@@ -59,11 +61,12 @@ class ConnectionHandler implements Runnable {
     ConnectionHandler(final Socket client) {
         this.client = client;
         opcodes.put(1, "OP_REPLY");
-        /** ... */
+        /**
+         * ...
+         */
     }
 
     private final HashMap<Integer, String> opcodes = new HashMap<>();
-
 
     @Override
     public final void run() {
@@ -99,8 +102,6 @@ class ConnectionHandler implements Runnable {
 
                 // String op = opcodes.get(opcode);
                 // System.out.println(op);
-
-
                 //view of type of request
                 switch (opcode) {
                     case 1:
@@ -153,6 +154,7 @@ class ConnectionHandler implements Runnable {
 
     /**
      * Read a string from the byte array.
+     *
      * @param msg
      * @param start
      * @return
@@ -160,7 +162,7 @@ class ConnectionHandler implements Runnable {
     public static String readString(final byte[] msg, final int start) {
         StringBuilder string = new StringBuilder();
         int i = start;
-         while (msg[i] != STRING_TERMINATION) {
+        while (msg[i] != STRING_TERMINATION) {
             string.append((char) msg[i]);
             i++;
         }
@@ -176,7 +178,21 @@ class ConnectionHandler implements Runnable {
         int document_length = convert(msg, 29 + collection.length());
         System.out.println("Document length: " + document_length);
 
-
+        //extract the document
+        byte[] document = new byte[document_length];
+        int i = 0;
+        while (i < document_length) {
+            document[i] = msg[29 + collection.length() + i];
+            i++;
+        }
+        StringBuilder string = new StringBuilder();
+        int j = 29 + collection.length();
+        int l = 0;
+        while (l < document_length) {
+            string.append((char) msg[j + l]);
+            l++;
+        }
+        System.out.println("document : " + string);
         //Get document in msg
         /*System.out.println("extract document...");
         int j = 20 + name_collection_length + 8; //start position of Document
@@ -190,11 +206,11 @@ class ConnectionHandler implements Runnable {
         }
         String doc = Arrays.toString(document);
         System.out.append("document : " + doc);*/
-
     }
 
     /**
      * Read the complete message to a Byte array.
+     *
      * @param stream
      * @return
      * @throws IOException
@@ -206,7 +222,6 @@ class ConnectionHandler implements Runnable {
         if (stream == null) {
             throw new Exception("Stream is null!");
         }
-
 
         // https://docs.mongodb.com/manual/reference/mongodb-wire-protocol/
         // Header =
@@ -241,6 +256,7 @@ class ConnectionHandler implements Runnable {
 
     /**
      * Consersion of 4bytes to a single int.
+     *
      * @param bytes
      * @param start
      * @return
@@ -248,9 +264,9 @@ class ConnectionHandler implements Runnable {
     protected static int convert(final byte[] bytes, final int start) {
 
         return (bytes[start + 3] << 24) & 0xff000000
-                        | (bytes[start + 2] << 16) & 0x00ff0000
-                        | (bytes[start + 1] << 8) & 0x0000ff00
-                        | (bytes[start]) & 0x000000ff;
+                | (bytes[start + 2] << 16) & 0x00ff0000
+                | (bytes[start + 1] << 8) & 0x0000ff00
+                | (bytes[start]) & 0x000000ff;
     }
 
     protected void processInsert(final byte[] msg) {

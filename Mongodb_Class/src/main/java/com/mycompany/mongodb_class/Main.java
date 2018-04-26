@@ -25,14 +25,14 @@ public final class Main {
      */
     public static void main(final String[] args) {
 
-        /*MongodbConnect mongodb = new MongodbConnect("myDb");
+        MongodbConnect mongodb = new MongodbConnect("myDb");
         mongodb.countDocument("stageCollection");
         mongodb.searchDoc("Title","Projet");
         mongodb.viewCollection("stageCollection");
-*/
 
 
 
+/*
         MongoClient mongo = new MongoClient("localhost", PORT);
         MongoDatabase database = mongo.getDatabase("myDb");
         MongoCollection<Document> collection = database.getCollection(
