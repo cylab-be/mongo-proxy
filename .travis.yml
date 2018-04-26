@@ -1,4 +1,4 @@
 language: java
-script: cd MongoWireProtocol && mvn clean package
+script: mvn clean package
 notifications:
     slack: cylab-be:VmUKJZod81wbNyfme4nyrYo8
