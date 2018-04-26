@@ -27,12 +27,22 @@ import static be.cylab.mongoproxy.ConnectionHandler.readInt;
 import static be.cylab.mongoproxy.Document.readByte;
 import static be.cylab.mongoproxy.ConnectionHandler.readCString;
 import static be.cylab.mongoproxy.ConnectionHandler.readString;
+import java.util.Arrays;
 
 /**
  *
  * @author tibo
  */
 public class Element {
+
+    public static boolean readBoolean(byte[] msg, int start) {
+        byte b = readByte(msg, start);
+        return b == 1;
+    }
+
+    private static byte[] readObjectId(byte[] msg, int start) {
+        return Arrays.copyOfRange(msg, start, start + 12);
+    }
 
 
 
@@ -53,7 +63,7 @@ public class Element {
      * @return
      */
     public String toString() {
-        return type + ":" + name + ":" + size();
+        return type + ":" + name;
     }
 
     /**
@@ -68,18 +78,32 @@ public class Element {
 
         if (type == 16) {
             int value = readInt(msg, start + name.length() + 2);
-            return new ElementDouble(type, name, value);
+            return new ElementInt(type, name, value);
         }
 
         if (type == 2) {
             String value = readString(msg, start + name.length() + 2);
-            System.out.println("Value: " + value);
             return new ElementString(type, name, value);
         }
 
         if (type == 3) {
             Document value = new Document(msg, start + name.length() + 2);
             return new ElementDocument(type, name, value);
+        }
+
+        if (type == 4) {
+            Document value = new Document(msg, start + name.length() + 2);
+            return new ElementDocument(type, name, value);
+        }
+
+        if (type == 7) {
+            byte[] value = readObjectId(msg, start + name.length() + 2);
+            return new ElementObjectId(type, name, value);
+        }
+
+        if (type == 8) {
+            boolean value = readBoolean(msg, start + name.length() + 2);
+            return new ElementBoolean(type, name, value);
         }
 
         return new Element(type, name);

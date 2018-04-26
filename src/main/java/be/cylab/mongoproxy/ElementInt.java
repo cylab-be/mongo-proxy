@@ -27,21 +27,28 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementDocument extends Element {
+public class ElementInt extends Element {
 
-    private final Document value;
+    private final int value;
 
-    public ElementDocument(int type, String name, Document value) {
+    /**
+     *
+     * @param type
+     * @param name
+     * @param value
+     */
+    public ElementInt(final int type, final String name, final int value) {
         super(type, name);
         this.value = value;
     }
 
+    @Override
     public int size() {
-        return super.size() + value.size();
+        return super.size() + 4;
     }
 
     public String toString() {
-        return super.toString() + ":" + value.toString();
+        return super.toString() + ":" + value;
     }
 
 }

@@ -101,7 +101,7 @@ class ConnectionHandler implements Runnable {
             InputStream srv_in = srv_socket.getInputStream();
 
             while (true) {
-                System.out.println("Read from client...");
+                // System.out.println("Read from client...");
                 byte[] msg = readMessage(client_in);
 
                 int opcode = readInt(msg, 12);
@@ -199,41 +199,10 @@ class ConnectionHandler implements Runnable {
     public void processQuery(final byte[] msg) {
 
         String collection = readCString(msg, 20);
-        System.out.println(collection);
+        System.out.println("Collection: " + collection);
 
         Document doc = new Document(msg, 29 + collection.length());
-        System.out.println(doc);
-
-
-        //extract the document
-        /*
-        byte[] document = new byte[document_length];
-        int i = 0;
-        while (i < document_length) {
-            document[i] = msg[29 + collection.length() + i];
-            i++;
-        }
-        StringBuilder string = new StringBuilder();
-        int j = 29 + collection.length();
-        int l = 0;
-        while (l < document_length) {
-            string.append((char) msg[j + l]);
-            l++;
-        }
-        System.out.println("document : " + string);
-        //Get document in msg
-        /*System.out.println("extract document...");
-        int j = 20 + name_collection_length + 8; //start position of Document
-
-        final int document_lenght = convert(msg, j);
-        System.out.println("lenght document : " + document_lenght);
-        byte[] document = new byte[document_lenght];
-        int k;
-        for (k = 0; k < document_lenght; k++) {
-            document[0] = msg[j + k];
-        }
-        String doc = Arrays.toString(document);
-        System.out.append("document : " + doc);*/
+        System.out.println("Document: " + doc);
     }
 
     /**

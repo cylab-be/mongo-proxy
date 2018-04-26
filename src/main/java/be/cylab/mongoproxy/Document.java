@@ -46,13 +46,14 @@ public class Document {
     public Document(final byte[] msg, final int start) {
         this.start = start;
         size = readInt(msg, start);
-        System.out.println("Document length: " + size);
+        // System.out.println("Document length: " + size);
+        // System.out.println("Document end: " + (start + size));
 
 
         elements = new LinkedList<>();
         int pointer = start + 4;
         while (pointer < (start + size - 1)) {
-            System.out.println("Pointer position: " + pointer);
+            //System.out.println("Pointer position: " + pointer);
             Element el = readElement(msg, pointer);
             elements.add(el);
             pointer += el.size();

@@ -27,24 +27,29 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementDouble extends Element {
+public class ElementObjectId extends Element {
 
-    private final int value;
+    private final byte[] value;
 
-    /**
-     *
-     * @param type
-     * @param name
-     * @param value
-     */
-    public ElementDouble(final int type, final String name, final int value) {
+    public ElementObjectId(int type, String name, byte[] value) {
         super(type, name);
         this.value = value;
     }
 
-    @Override
     public int size() {
-        return super.size() + 4;
+        return super.size() + 12;
+    }
+
+    public String toString() {
+        return super.toString() + ":" + byteArrayToHex(value);
+    }
+
+    public static String byteArrayToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+        for (byte b : bytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
 }

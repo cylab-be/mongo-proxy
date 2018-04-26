@@ -27,21 +27,22 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementDocument extends Element {
+public class ElementBoolean extends Element {
 
-    private final Document value;
+    private final boolean value;
 
-    public ElementDocument(int type, String name, Document value) {
+    public ElementBoolean(int type, String name, boolean value) {
+
         super(type, name);
         this.value = value;
     }
 
-    public int size() {
-        return super.size() + value.size();
+    public String toString() {
+        return super.toString() + ":" + value;
     }
 
-    public String toString() {
-        return super.toString() + ":" + value.toString();
+    public int size() {
+        return super.size() + 1;
     }
 
 }
