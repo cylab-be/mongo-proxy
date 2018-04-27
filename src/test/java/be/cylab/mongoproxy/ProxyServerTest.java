@@ -38,56 +38,39 @@ import static org.junit.Assert.assertEquals;
  */
 public class ProxyServerTest {
 
-    private static final int PORT = 9632;
+    public static final int PORT = 9632;
+    private volatile Exception srv_thread_exception = null;
 
     /**
      * Test of run method, of class ProxyServer.
      * @throws java.lang.InterruptedException
      */
     @Test
-    public final void testRun() throws InterruptedException {
-        System.out.println("run");
+    public final void testRun() throws InterruptedException, Exception {
 
         System.out.println("Start the proxy server...");
         Thread srv_thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ProxyServer srv = new ProxyServer(PORT);
-                srv.addListener("myCollection", new Listener() {
-                    @Override
-                    public void run(be.cylab.mongoproxy.Document doc) {
-                        System.out.println("Notified: " + doc);
-                    }
-                });
-                srv.run();
+                try {
+                    ProxyServer srv = new ProxyServer(PORT);
+                    srv.addListener("myCollection", new Listener() {
+                        @Override
+                        public void run(
+                                final be.cylab.mongoproxy.Document doc) {
+                            System.out.println("Notified: " + doc);
+                        }
+                    });
+                    srv.run();
+                } catch (Exception ex) {
+                    srv_thread_exception = ex;
+                }
             }
         });
         srv_thread.start();
 
         System.out.println("Run some tests...");
-        Thread client_thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MongoClient mongo = new MongoClient("localhost", PORT);
-                MongoDatabase database = mongo.getDatabase("myDb");
-                MongoCollection<Document> collection = database.getCollection(
-                        "myCollection");
-
-                long initial_count = collection.count();
-                Document doc = new Document("key", "value");
-                collection.insertOne(doc);
-
-                Document doc2 = new Document("name", "MongoDB")
-                    .append("type", "database")
-                    .append("count", 1)
-                    .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
-                    .append("info", new Document("x", 203).append("y", 102));
-                collection.insertOne(doc2);
-
-                long final_count = collection.count();
-                assertEquals(initial_count + 2, final_count);
-            }
-        });
+        Thread client_thread = new Thread(new TestRunnable());
         client_thread.start();
 
         // Wait for the client to finish, and kill if it is stuck
@@ -96,9 +79,37 @@ public class ProxyServerTest {
             client_thread.interrupt();
         }
 
+        if (srv_thread_exception != null) {
+            throw new Exception(
+                    "Server thread had an exception", srv_thread_exception);
+        }
+
         srv_thread.interrupt();
-
-
     }
 
+}
+
+class TestRunnable implements Runnable {
+
+    @Override
+    public void run() {
+        MongoClient mongo = new MongoClient("localhost", ProxyServerTest.PORT);
+        MongoDatabase database = mongo.getDatabase("myDb");
+        MongoCollection<Document> collection = database.getCollection(
+                "myCollection");
+
+        long initial_count = collection.count();
+        Document doc = new Document("key", "value");
+        collection.insertOne(doc);
+
+        Document doc2 = new Document("name", "MongoDB")
+            .append("type", "database")
+            .append("count", 1)
+            .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
+            .append("info", new Document("x", 203).append("y", 102));
+        collection.insertOne(doc2);
+
+        long final_count = collection.count();
+        assertEquals(initial_count + 2, final_count);
+    }
 }

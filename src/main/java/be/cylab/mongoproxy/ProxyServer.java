@@ -107,8 +107,6 @@ class ConnectionHandler implements Runnable {
         this.listeners = listeners;
     }
 
-    private final HashMap<Integer, String> opcodes = new HashMap<>();
-
     @Override
     public final void run() {
 
