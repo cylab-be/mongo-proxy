@@ -36,8 +36,6 @@ public class Document {
     private int size;
     private List<Element> elements;
 
-
-
     /**
      *
      * @param msg
@@ -60,6 +58,10 @@ public class Document {
         }
 
     }
+
+    /*public Element get(int index) {
+        return elements.get(index);
+    }*/
 
     public int size() {
         return size;

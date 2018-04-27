@@ -32,8 +32,9 @@ import java.util.Arrays;
 /**
  *
  * @author tibo
+ * @param <T> type of value contained in the element
  */
-public class Element {
+public abstract class Element<T> {
 
     public static boolean readBoolean(byte[] msg, int start) {
         byte b = readByte(msg, start);
@@ -106,7 +107,13 @@ public class Element {
             return new ElementBoolean(type, name, value);
         }
 
-        return new Element(type, name);
+        return new DummyElement(type, name);
+    }
+
+    protected T value;
+
+    public T getValue() {
+        return value;
     }
 
 }

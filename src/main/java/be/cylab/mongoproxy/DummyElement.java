@@ -27,31 +27,10 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementString extends Element<String> {
+public class DummyElement extends Element {
 
-
-    /**
-     *
-     * @param type
-     * @param name
-     * @param value
-     */
-    public ElementString(
-            final int type, final String name, final String value) {
+    public DummyElement(int type, String name) {
         super(type, name);
-        this.value = value;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String toString() {
-        return super.toString() + ":" + value;
-    }
-
-    public int size() {
-        return super.size() + value.length() + 3;
     }
 
 }

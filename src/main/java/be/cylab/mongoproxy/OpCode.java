@@ -27,31 +27,48 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementString extends Element<String> {
+public enum OpCode {
 
+    OP_REPLY (1),
+    OP_UPDATE(2001),
+    OP_INSERT(2002),
+    RESERVED(2003),
+    OP_QUERY(2004),
+    OP_GET_MORE(2005),
+    OP_DELETE(2006),
+    OP_KILL_CURSORS(2007),
+    OP_COMMAND(2010),
+    OP_COMMANDREPLY(2011),
+    OP_MSG(2013),
+    OP_UNKNOWN(0);
 
-    /**
-     *
-     * @param type
-     * @param name
-     * @param value
-     */
-    public ElementString(
-            final int type, final String name, final String value) {
-        super(type, name);
-        this.value = value;
+    private final int code;
+
+    OpCode(final int code) {
+        this.code = code;
     }
 
     /**
      *
      * @return
      */
-    public String toString() {
-        return super.toString() + ":" + value;
+    public int getValue() {
+        return code;
     }
 
-    public int size() {
-        return super.size() + value.length() + 3;
+    /**
+     * Find opcode from it's numerical value.
+     * @param value
+     * @return
+     */
+    public static OpCode findByValue(int value) {
+        for (OpCode opcode : values()) {
+            if (opcode.getValue() == value) {
+                return opcode;
+            }
+        }
+
+        return OpCode.OP_UNKNOWN;
     }
 
 }

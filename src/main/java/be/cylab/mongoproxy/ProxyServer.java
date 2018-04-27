@@ -30,6 +30,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  *
@@ -51,6 +52,7 @@ public class ProxyServer {
      * Run forever.
      */
     public final void run() {
+
         try {
 
             // Wait for client connection...
@@ -66,6 +68,16 @@ public class ProxyServer {
             System.out.println(ex.getMessage());
         }
     }
+
+    public final void addListener(String collection, Listener listener) {
+        LinkedList<Listener> collection_listeners =
+                listeners.getOrDefault(collection, new LinkedList<>());
+
+        collection_listeners.add(listener);
+        listeners.put(collection, collection_listeners);
+    }
+
+    private final HashMap<String, LinkedList<Listener>> listeners = new HashMap<>();
 }
 
 
@@ -77,13 +89,11 @@ class ConnectionHandler implements Runnable {
     private static final int PORT_DB = 27017;
 
     private final Socket client;
+    //private final HashMap<String, LinkedList<Listener>> listeners;
 
     ConnectionHandler(final Socket client) {
         this.client = client;
-        opcodes.put(1, "OP_REPLY");
-        /**
-         * ...
-         */
+        //this.listeners = listeners;
     }
 
     private final HashMap<Integer, String> opcodes = new HashMap<>();
@@ -128,47 +138,13 @@ class ConnectionHandler implements Runnable {
         }
     }
 
+    /**
+     * Get the name of this opcode.
+     * @param opcode
+     * @return
+     */
     public String getOpcodeName(final int opcode) {
-        // String op = opcodes.get(opcode);
-        // System.out.println(op);
-        //view of type of request
-        switch (opcode) {
-            case 1:
-                return "OP_REPLY";
-
-            case 2001:
-                return "OP_UPDATE";
-
-            case 2002:
-                return "OP_INSERT";
-
-            case 2003:
-                return "RESERVED";
-
-            case 2004:
-                return "OP_QUERY";
-
-            case 2005:
-                return "OP_GET_MORE";
-
-            case 2006:
-                return "OP_DELETE";
-
-            case 2007:
-                return "OP_KILL_CURSORS";
-
-            case 2010:
-                return "OP_COMMAND";
-
-            case 2011:
-                return "OP_COMMANDREPLY";
-
-            case 2013:
-                return "OP_MSG";
-
-            default:
-                return "Unknown";
-        }
+        return OpCode.findByValue(opcode).name();
 
     }
 
@@ -202,7 +178,11 @@ class ConnectionHandler implements Runnable {
         System.out.println("Collection: " + collection);
 
         Document doc = new Document(msg, 29 + collection.length());
-        System.out.println("Document: " + doc);
+        //System.out.println("Document: " + doc);
+
+        //for (Listener listener : listeners.get(collection)) {
+            // listener.notify(doc);
+        //}
     }
 
     /**

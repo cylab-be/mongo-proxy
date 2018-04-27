@@ -23,35 +23,27 @@
  */
 package be.cylab.mongoproxy;
 
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
  * @author tibo
  */
-public class ElementString extends Element<String> {
+public class OpCodeTest {
 
-
-    /**
-     *
-     * @param type
-     * @param name
-     * @param value
-     */
-    public ElementString(
-            final int type, final String name, final String value) {
-        super(type, name);
-        this.value = value;
+    public OpCodeTest() {
     }
 
     /**
-     *
-     * @return
+     * Test of values method, of class OpCode.
      */
-    public String toString() {
-        return super.toString() + ":" + value;
-    }
+    @Test
+    public void testValues() {
 
-    public int size() {
-        return super.size() + value.length() + 3;
+        OpCode opcode = OpCode.valueOf("OP_REPLY");
+        assertEquals(1, opcode.getValue());
+
     }
 
 }

@@ -27,31 +27,6 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementString extends Element<String> {
-
-
-    /**
-     *
-     * @param type
-     * @param name
-     * @param value
-     */
-    public ElementString(
-            final int type, final String name, final String value) {
-        super(type, name);
-        this.value = value;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String toString() {
-        return super.toString() + ":" + value;
-    }
-
-    public int size() {
-        return super.size() + value.length() + 3;
-    }
-
+public interface Listener {
+    public void notify(Document doc);
 }
