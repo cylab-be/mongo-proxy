@@ -29,21 +29,61 @@ package be.cylab.mongoproxy;
  */
 public enum OpCode {
 
-    OP_REPLY (1),
+    /**
+     *
+     */
+    OP_REPLY(1),
+    /**
+     *
+     */
     OP_UPDATE(2001),
+    /**
+     *
+     */
     OP_INSERT(2002),
+    /**
+     *
+     */
     RESERVED(2003),
+    /**
+     *
+     */
     OP_QUERY(2004),
+    /**
+     *
+     */
     OP_GET_MORE(2005),
+    /**
+     *
+     */
     OP_DELETE(2006),
+    /**
+     *
+     */
     OP_KILL_CURSORS(2007),
+    /**
+     *
+     */
     OP_COMMAND(2010),
+    /**
+     *
+     */
     OP_COMMANDREPLY(2011),
+    /**
+     *
+     */
     OP_MSG(2013),
+    /**
+     *
+     */
     OP_UNKNOWN(0);
 
     private final int code;
 
+    /**
+     *
+     * @param code
+     */
     OpCode(final int code) {
         this.code = code;
     }
@@ -58,10 +98,11 @@ public enum OpCode {
 
     /**
      * Find opcode from it's numerical value.
+     *
      * @param value
      * @return
      */
-    public static OpCode findByValue(int value) {
+    public static OpCode findByValue(final int value) {
         for (OpCode opcode : values()) {
             if (opcode.getValue() == value) {
                 return opcode;

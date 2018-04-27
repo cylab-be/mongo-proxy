@@ -47,6 +47,10 @@ public class ElementInt extends Element<Integer> {
         return super.size() + 4;
     }
 
+    /**
+     *
+     * @return
+     */
     public String toString() {
         return super.toString() + ":" + value;
     }

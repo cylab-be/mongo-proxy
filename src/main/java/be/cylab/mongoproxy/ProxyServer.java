@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package be.cylab.mongoproxy;
 
 import java.io.IOException;
@@ -69,17 +68,23 @@ public class ProxyServer {
         }
     }
 
-    public final void addListener(String collection, Listener listener) {
-        LinkedList<Listener> collection_listeners =
-                listeners.getOrDefault(collection, new LinkedList<>());
+    /**
+     *
+     * @param collection
+     * @param listener
+     */
+    public final void addListener(final String collection,
+            final Listener listener) {
+        LinkedList<Listener> collection_listeners
+                = listeners.getOrDefault(collection, new LinkedList<>());
 
         collection_listeners.add(listener);
         listeners.put(collection, collection_listeners);
     }
 
-    private final HashMap<String, LinkedList<Listener>> listeners = new HashMap<>();
+    private final HashMap<String, LinkedList<Listener>> listeners
+            = new HashMap<>();
 }
-
 
 /**
  * @author sonoflight
@@ -91,7 +96,13 @@ class ConnectionHandler implements Runnable {
     private final Socket client;
     private final HashMap<String, LinkedList<Listener>> listeners;
 
-    ConnectionHandler(final Socket client, HashMap<String, LinkedList<Listener>> listeners) {
+    /**
+     *
+     * @param client
+     * @param listeners
+     */
+    ConnectionHandler(final Socket client, final HashMap<String, LinkedList<
+            Listener>> listeners) {
         this.client = client;
         this.listeners = listeners;
     }
@@ -140,6 +151,7 @@ class ConnectionHandler implements Runnable {
 
     /**
      * Get the name of this opcode.
+     *
      * @param opcode
      * @return
      */
@@ -168,10 +180,20 @@ class ConnectionHandler implements Runnable {
         return string.toString();
     }
 
+    /**
+     *
+     * @param msg
+     * @param start
+     * @return
+     */
     public static String readString(final byte[] msg, final int start) {
         return readCString(msg, start + 4);
     }
 
+    /**
+     *
+     * @param msg
+     */
     public void processQuery(final byte[] msg) {
 
         String db = readCString(msg, 20);
@@ -256,6 +278,10 @@ class ConnectionHandler implements Runnable {
                 | (bytes[start]) & 0x000000ff;
     }
 
+    /**
+     *
+     * @param msg
+     */
     protected void processInsert(final byte[] msg) {
 
     }

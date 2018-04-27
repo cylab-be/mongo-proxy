@@ -31,16 +31,31 @@ public class ElementBoolean extends Element<Boolean> {
 
     private final boolean value;
 
-    public ElementBoolean(int type, String name, boolean value) {
+    /**
+     *
+     * @param type
+     * @param name
+     * @param value
+     */
+    public ElementBoolean(final int type, final String name,
+            final boolean value) {
 
         super(type, name);
         this.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public String toString() {
         return super.toString() + ":" + value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int size() {
         return super.size() + 1;
     }

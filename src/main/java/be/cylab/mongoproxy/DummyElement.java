@@ -29,10 +29,19 @@ package be.cylab.mongoproxy;
  */
 public class DummyElement extends Element<Object> {
 
-    public DummyElement(int type, String name) {
+    /**
+     *
+     * @param type
+     * @param name
+     */
+    public DummyElement(final int type, final String name) {
         super(type, name);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Object value() {
         return null;

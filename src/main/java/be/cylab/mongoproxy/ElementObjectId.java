@@ -31,20 +31,40 @@ public class ElementObjectId extends Element<byte[]> {
 
     private final byte[] value;
 
-    public ElementObjectId(int type, String name, byte[] value) {
+    /**
+     *
+     * @param type
+     * @param name
+     * @param value
+     */
+    public ElementObjectId(final int type, final String name,
+            final byte[] value) {
         super(type, name);
         this.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int size() {
         return super.size() + 12;
     }
 
+    /**
+     *
+     * @return
+     */
     public String toString() {
         return super.toString() + ":" + byteArrayToHex(value);
     }
 
-    public static String byteArrayToHex(byte[] bytes) {
+    /**
+     *
+     * @param bytes
+     * @return
+     */
+    public static String byteArrayToHex(final byte[] bytes) {
         StringBuilder sb = new StringBuilder(bytes.length * 2);
         for (byte b : bytes) {
             sb.append(String.format("%02x", b));

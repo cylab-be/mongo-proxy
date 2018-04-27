@@ -31,15 +31,30 @@ public class ElementDocument extends Element<Document> {
 
     private final Document value;
 
-    public ElementDocument(int type, String name, Document value) {
+    /**
+     *
+     * @param type
+     * @param name
+     * @param value
+     */
+    public ElementDocument(final int type, final String name,
+            final Document value) {
         super(type, name);
         this.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int size() {
         return super.size() + value.size();
     }
 
+    /**
+     *
+     * @return
+     */
     public String toString() {
         return super.toString() + ":" + value.toString();
     }

@@ -29,6 +29,7 @@ package be.cylab.mongoproxy;
  */
 public class ElementString extends Element<String> {
 
+    private final String value;
 
     /**
      *
@@ -50,6 +51,10 @@ public class ElementString extends Element<String> {
         return super.toString() + ":" + value;
     }
 
+    /**
+     *
+     * @return
+     */
     public int size() {
         return super.size() + value.length() + 3;
     }

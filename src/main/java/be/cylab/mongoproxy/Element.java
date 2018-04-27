@@ -36,27 +36,52 @@ import java.util.Arrays;
  */
 public abstract class Element<T> {
 
+    private T value;
+
+    /**
+     *
+     * @return
+     */
     public abstract T value();
 
-    public static boolean readBoolean(byte[] msg, int start) {
+    /**
+     *
+     * @param msg
+     * @param start
+     * @return
+     */
+    public static boolean readBoolean(final byte[] msg, final int start) {
         byte b = readByte(msg, start);
         return b == 1;
     }
 
-    private static byte[] readObjectId(byte[] msg, int start) {
+    /**
+     *
+     * @param msg
+     * @param start
+     * @return
+     */
+    private static byte[] readObjectId(final byte[] msg, final int start) {
         return Arrays.copyOfRange(msg, start, start + 12);
     }
-
-
 
     private final int type;
     private final String name;
 
+    /**
+     *
+     * @param type
+     * @param name
+     */
     Element(final int type, final String name) {
         this.type = type;
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public int size() {
         return 2 + name.length();
     }
@@ -112,8 +137,10 @@ public abstract class Element<T> {
         return new DummyElement(type, name);
     }
 
-    protected T value;
-
+    /**
+     *
+     * @return
+     */
     public T getValue() {
         return value;
     }

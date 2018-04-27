@@ -32,6 +32,7 @@ import java.util.List;
  * @author tibo
  */
 public class Document {
+
     private int start;
     private int size;
     private List<Element> elements;
@@ -47,7 +48,6 @@ public class Document {
         // System.out.println("Document length: " + size);
         // System.out.println("Document end: " + (start + size));
 
-
         elements = new LinkedList<>();
         int pointer = start + 4;
         while (pointer < (start + size - 1)) {
@@ -59,10 +59,11 @@ public class Document {
 
     }
 
-    /*public Element get(int index) {
-        return elements.get(index);
-    }*/
-
+    /**
+     * size of the document.
+     *
+     * @return
+     */
     public int size() {
         return size;
     }
@@ -96,7 +97,12 @@ public class Document {
         return elements.toString();
     }
 
-    public Element get(int index) {
+    /**
+     *
+     * @param index
+     * @return
+     */
+    public Element get(final int index) {
         return elements.get(index);
     }
 }
