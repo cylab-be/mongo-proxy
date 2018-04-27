@@ -27,7 +27,7 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementDocument extends Element {
+public class ElementDocument extends Element<Document> {
 
     private final Document value;
 
@@ -42,6 +42,11 @@ public class ElementDocument extends Element {
 
     public String toString() {
         return super.toString() + ":" + value.toString();
+    }
+
+    @Override
+    public Document value() {
+        return value;
     }
 
 }

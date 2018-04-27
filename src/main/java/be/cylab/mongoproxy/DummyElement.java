@@ -27,10 +27,15 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class DummyElement extends Element {
+public class DummyElement extends Element<Object> {
 
     public DummyElement(int type, String name) {
         super(type, name);
+    }
+
+    @Override
+    public Object value() {
+        return null;
     }
 
 }

@@ -27,7 +27,7 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementBoolean extends Element {
+public class ElementBoolean extends Element<Boolean> {
 
     private final boolean value;
 
@@ -43,6 +43,11 @@ public class ElementBoolean extends Element {
 
     public int size() {
         return super.size() + 1;
+    }
+
+    @Override
+    public Boolean value() {
+        return value;
     }
 
 }

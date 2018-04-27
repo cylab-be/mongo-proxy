@@ -95,4 +95,8 @@ public class Document {
     public final String toString() {
         return elements.toString();
     }
+
+    public Element get(int index) {
+        return elements.get(index);
+    }
 }

@@ -27,7 +27,7 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementObjectId extends Element {
+public class ElementObjectId extends Element<byte[]> {
 
     private final byte[] value;
 
@@ -50,6 +50,11 @@ public class ElementObjectId extends Element {
             sb.append(String.format("%02x", b));
         }
         return sb.toString();
+    }
+
+    @Override
+    public byte[] value() {
+        return value;
     }
 
 }

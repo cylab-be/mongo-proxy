@@ -27,7 +27,7 @@ package be.cylab.mongoproxy;
  *
  * @author tibo
  */
-public class ElementInt extends Element {
+public class ElementInt extends Element<Integer> {
 
     private final int value;
 
@@ -49,6 +49,11 @@ public class ElementInt extends Element {
 
     public String toString() {
         return super.toString() + ":" + value;
+    }
+
+    @Override
+    public Integer value() {
+        return value;
     }
 
 }

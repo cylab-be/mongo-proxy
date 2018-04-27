@@ -61,7 +61,7 @@ public class ProxyServer {
             while (true) {
                 Socket client = socket.accept();
                 System.out.println("Connected");
-                new Thread(new ConnectionHandler(client)).start();
+                new Thread(new ConnectionHandler(client, listeners)).start();
             }
 
         } catch (IOException ex) {
@@ -89,11 +89,11 @@ class ConnectionHandler implements Runnable {
     private static final int PORT_DB = 27017;
 
     private final Socket client;
-    //private final HashMap<String, LinkedList<Listener>> listeners;
+    private final HashMap<String, LinkedList<Listener>> listeners;
 
-    ConnectionHandler(final Socket client) {
+    ConnectionHandler(final Socket client, HashMap<String, LinkedList<Listener>> listeners) {
         this.client = client;
-        //this.listeners = listeners;
+        this.listeners = listeners;
     }
 
     private final HashMap<Integer, String> opcodes = new HashMap<>();
@@ -174,15 +174,25 @@ class ConnectionHandler implements Runnable {
 
     public void processQuery(final byte[] msg) {
 
-        String collection = readCString(msg, 20);
-        System.out.println("Collection: " + collection);
+        String db = readCString(msg, 20);
+        System.out.println("DB: " + db);
 
-        Document doc = new Document(msg, 29 + collection.length());
-        //System.out.println("Document: " + doc);
+        Document doc = new Document(msg, 29 + db.length());
+        System.out.println("Document: " + doc);
 
-        //for (Listener listener : listeners.get(collection)) {
-            // listener.notify(doc);
-        //}
+        if (!db.equals("myDb.$cmd")) {
+            return;
+        }
+
+        String collection = (String) doc.get(0).value();
+        LinkedList<Listener> collection_listeners = listeners.get(collection);
+        if (collection_listeners == null) {
+            return;
+        }
+
+        for (Listener listener : collection_listeners) {
+            listener.run(doc);
+        }
     }
 
     /**

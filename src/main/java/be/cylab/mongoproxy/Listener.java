@@ -28,5 +28,5 @@ package be.cylab.mongoproxy;
  * @author tibo
  */
 public interface Listener {
-    public void notify(Document doc);
+    public void run(Document doc);
 }

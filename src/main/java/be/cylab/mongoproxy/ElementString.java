@@ -54,4 +54,9 @@ public class ElementString extends Element<String> {
         return super.size() + value.length() + 3;
     }
 
+    @Override
+    public String value() {
+        return value;
+    }
+
 }

@@ -55,8 +55,8 @@ public class ProxyServerTest {
                 ProxyServer srv = new ProxyServer(PORT);
                 srv.addListener("myCollection", new Listener() {
                     @Override
-                    public void notify(be.cylab.mongoproxy.Document doc) {
-                        System.out.println("Notified");
+                    public void run(be.cylab.mongoproxy.Document doc) {
+                        System.out.println("Notified: " + doc);
                     }
                 });
                 srv.run();

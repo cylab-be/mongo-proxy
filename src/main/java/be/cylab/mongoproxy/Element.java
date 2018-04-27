@@ -36,6 +36,8 @@ import java.util.Arrays;
  */
 public abstract class Element<T> {
 
+    public abstract T value();
+
     public static boolean readBoolean(byte[] msg, int start) {
         byte b = readByte(msg, start);
         return b == 1;
