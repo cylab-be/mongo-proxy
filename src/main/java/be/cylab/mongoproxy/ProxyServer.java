@@ -38,6 +38,8 @@ import java.util.LinkedList;
 public class ProxyServer {
 
     private final int port;
+    private final HashMap<String, LinkedList<Listener>> listeners
+            = new HashMap<>();
 
     /**
      *
@@ -82,8 +84,6 @@ public class ProxyServer {
         listeners.put(collection, collection_listeners);
     }
 
-    private final HashMap<String, LinkedList<Listener>> listeners
-            = new HashMap<>();
 }
 
 /**
@@ -200,12 +200,11 @@ class ConnectionHandler implements Runnable {
         Document doc = new Document(msg, 29 + db.length());
         System.out.println("Document: " + doc);
 
-        if (!db.equals("myDb.$cmd")) {
-            return;
-        }
+        String collection = (String) doc.get(0).getValue();
+        System.out.println("Listner: " + collection);
 
-        String collection = (String) doc.get(0).value();
         LinkedList<Listener> collection_listeners = listeners.get(collection);
+
         if (collection_listeners == null) {
             return;
         }
