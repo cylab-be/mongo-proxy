@@ -54,7 +54,7 @@ public class ProxyServerTest {
             public void run() {
                 try {
                     ProxyServer srv = new ProxyServer(PORT);
-                    srv.addListener("ismaster", new Listener() {
+                    srv.addListener("admin.$cmd", new Listener() {
                         @Override
                         public void run(
                                 final be.cylab.mongoproxy.Document doc) {

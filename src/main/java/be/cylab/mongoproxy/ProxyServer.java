@@ -194,16 +194,17 @@ class ConnectionHandler implements Runnable {
      */
     public void processQuery(final byte[] msg) {
 
-        String db = readCString(msg, 20);
-        System.out.println("DB: " + db);
+        //get collection name to run listner if find
+        String collection_name = readCString(msg, 20);
+        System.out.println("Collection: " + collection_name);
 
-        Document doc = new Document(msg, 29 + db.length());
+        //get documment in msg 
+        Document doc = new Document(msg, 29 + collection_name.length());
         System.out.println("Document: " + doc);
 
-        String collection = (String) doc.get(0).getValue();
-        System.out.println("Listner: " + collection);
-
-        LinkedList<Listener> collection_listeners = listeners.get(collection);
+        //find collection in the liste of listners
+        LinkedList<Listener> collection_listeners = listeners.get(
+                collection_name);
 
         if (collection_listeners == null) {
             return;
@@ -211,6 +212,8 @@ class ConnectionHandler implements Runnable {
 
         for (Listener listener : collection_listeners) {
             listener.run(doc);
+            System.out.println("listner running...");
+
         }
     }
 

@@ -25,7 +25,6 @@ package be.cylab.mongoproxy;
 
 import static be.cylab.mongoproxy.ConnectionHandler.readInt;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -35,7 +34,7 @@ public class Document {
 
     private int start;
     private int size;
-    private List<Element> elements;
+    private LinkedList<Element> elements;
 
     /**
      *
@@ -103,6 +102,7 @@ public class Document {
      * @return
      */
     public Element get(final int index) {
+
         return elements.get(index);
     }
 }
