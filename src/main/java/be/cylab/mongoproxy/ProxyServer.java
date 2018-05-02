@@ -30,12 +30,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author tibo
  */
 public class ProxyServer {
+
+    private final Logger logger = LoggerFactory.getLogger(
+            ProxyServer.class);
 
     private final int port;
     private final HashMap<String, LinkedList<Listener>> listeners
@@ -61,7 +66,7 @@ public class ProxyServer {
 
             while (true) {
                 Socket client = socket.accept();
-                System.out.println("Connected");
+                logger.info("Connected");
                 new Thread(new ConnectionHandler(client, listeners)).start();
             }
 
@@ -92,6 +97,8 @@ public class ProxyServer {
 class ConnectionHandler implements Runnable {
 
     private static final int PORT_DB = 27017;
+    private final Logger logger = LoggerFactory.getLogger(
+            ConnectionHandler.class);
 
     private final Socket client;
     private final HashMap<String, LinkedList<Listener>> listeners;
@@ -124,7 +131,8 @@ class ConnectionHandler implements Runnable {
                 byte[] msg = readMessage(client_in);
 
                 int opcode = readInt(msg, 12);
-                System.out.println("Opcode: " + getOpcodeName(opcode));
+
+                logger.info("Opcode: {}", getOpcodeName(opcode));
 
                 if (opcode == 2004) {
                     processQuery(msg);
@@ -196,11 +204,13 @@ class ConnectionHandler implements Runnable {
 
         //get collection name to run listner if find
         String collection_name = readCString(msg, 20);
-        System.out.println("Collection: " + collection_name);
 
-        //get documment in msg 
+        logger.info("collection name: {}", collection_name);
+
+        //get documment in msg
         Document doc = new Document(msg, 29 + collection_name.length());
-        System.out.println("Document: " + doc);
+        //System.out.println("Document: " + doc);
+        logger.info("Document: {}", doc.toString());
 
         //find collection in the liste of listners
         LinkedList<Listener> collection_listeners = listeners.get(
@@ -212,7 +222,8 @@ class ConnectionHandler implements Runnable {
 
         for (Listener listener : collection_listeners) {
             listener.run(doc);
-            System.out.println("listner running...");
+
+            logger.info("listner running...");
 
         }
     }
