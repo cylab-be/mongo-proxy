@@ -49,7 +49,7 @@ public class ProxyServerTest {
     public final void testRun() throws InterruptedException, Exception {
 
         System.out.println("Start the proxy server...");
-        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
+        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
         Thread srv_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -95,7 +95,7 @@ class TestRunnable implements Runnable {
     @Override
     public void run() {
         MongoClient mongo = new MongoClient("localhost", ProxyServerTest.PORT);
-        MongoDatabase database = mongo.getDatabase("myDb");
+        MongoDatabase database = mongo.getDatabase("test");
         MongoCollection<Document> collection = database.getCollection(
                 "myCollection");
 
