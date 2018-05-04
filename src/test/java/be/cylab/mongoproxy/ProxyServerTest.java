@@ -49,6 +49,7 @@ public class ProxyServerTest {
     public final void testRun() throws InterruptedException, Exception {
 
         System.out.println("Start the proxy server...");
+        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
         Thread srv_thread = new Thread(new Runnable() {
             @Override
             public void run() {

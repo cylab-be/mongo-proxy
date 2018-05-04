@@ -205,12 +205,12 @@ class ConnectionHandler implements Runnable {
         //get collection name to run listner if find
         String collection_name = readCString(msg, 20);
 
-        logger.info("collection name: {}", collection_name);
+        logger.debug("collection name: {}", collection_name);
 
         //get documment in msg
         Document doc = new Document(msg, 29 + collection_name.length());
         //System.out.println("Document: " + doc);
-        logger.info("Document: {}", doc.toString());
+        logger.debug("Document: {}", doc.toString());
 
         //find collection in the liste of listners
         LinkedList<Listener> collection_listeners = listeners.get(
