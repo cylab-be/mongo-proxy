@@ -27,6 +27,7 @@ package be.cylab.mongoproxy;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import java.util.Arrays;
 import org.bson.Document;
 import org.junit.Test;
@@ -109,6 +110,7 @@ class TestRunnable implements Runnable {
             .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
             .append("info", new Document("x", 203).append("y", 102));
         collection.insertOne(doc2);
+        collection.deleteMany(Filters.eq("name","MongoDB"));
 
         long final_count = collection.count();
         assertEquals(initial_count + 2, final_count);

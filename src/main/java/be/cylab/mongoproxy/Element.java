@@ -68,7 +68,7 @@ public abstract class Element<T> {
     }
 
     /**
-     * Read id object of Bson document from a byte array.
+     * Read id object of BSON document from a byte array.
      *
      * @param msg
      * @param start
