@@ -110,9 +110,9 @@ class TestRunnable implements Runnable {
             .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
             .append("info", new Document("x", 203).append("y", 102));
         collection.insertOne(doc2);
-        collection.deleteMany(Filters.eq("name","MongoDB"));
+        collection.deleteMany(Filters.eq("name", "MongoDB"));
 
         long final_count = collection.count();
-        assertEquals(initial_count + 2, final_count);
+        assertEquals(initial_count + 1, final_count);
     }
 }
