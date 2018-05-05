@@ -39,8 +39,10 @@ import static org.junit.Assert.assertEquals;
  */
 public class ProxyServerTest {
 
+    /**
+     * The port on which the proxy server will be listening.
+     */
     public static final int PORT = 9632;
-    private volatile Exception srv_thread_exception = null;
 
     /**
      * Test of run method, of class ProxyServer.
@@ -50,29 +52,33 @@ public class ProxyServerTest {
     public final void testRun() throws InterruptedException, Exception {
 
         System.out.println("Start the proxy server...");
-        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
+        System.setProperty(
+                org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
+
         Thread srv_thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    ProxyServer srv = new ProxyServer(PORT);
-                    srv.addListener("admin.$cmd", new Listener() {
-                        @Override
-                        public void run(
-                                final be.cylab.mongoproxy.Document doc) {
-                            System.out.println("Notified: " + doc);
-                        }
-                    });
-                    srv.run();
-                } catch (Exception ex) {
-                    srv_thread_exception = ex;
-                }
+                ProxyServer srv = new ProxyServer(PORT);
+                srv.addListener("admin.$cmd", new Listener() {
+                    @Override
+                    public void run(
+                            final be.cylab.mongoproxy.Document doc) {
+                        System.out.println("Notified: " + doc);
+                    }
+                });
+                srv.run();
             }
+        });
+
+        srv_thread.setUncaughtExceptionHandler(
+                (final Thread t, final Throwable e) -> {
+            throw new RuntimeException("Server thread exception", e);
         });
         srv_thread.start();
 
         System.out.println("Run some tests...");
-        Thread client_thread = new Thread(new TestRunnable());
+        ClientTest client_test = new ClientTest();
+        Thread client_thread = new Thread(client_test);
         client_thread.start();
 
         // Wait for the client to finish, and kill if it is stuck
@@ -81,9 +87,10 @@ public class ProxyServerTest {
             client_thread.interrupt();
         }
 
-        if (srv_thread_exception != null) {
-            throw new Exception(
-                    "Server thread had an exception", srv_thread_exception);
+        System.out.println(client_test.getException());
+
+        if (client_test.getException() != null) {
+            throw client_test.getException();
         }
 
         srv_thread.interrupt();
@@ -91,28 +98,39 @@ public class ProxyServerTest {
 
 }
 
-class TestRunnable implements Runnable {
+class ClientTest implements Runnable {
+
+    private AssertionError er;
 
     @Override
     public void run() {
-        MongoClient mongo = new MongoClient("localhost", ProxyServerTest.PORT);
-        MongoDatabase database = mongo.getDatabase("test");
-        MongoCollection<Document> collection = database.getCollection(
-                "myCollection");
+        try {
+            MongoClient mongo = new MongoClient(
+                    "localhost", ProxyServerTest.PORT);
+            MongoDatabase database = mongo.getDatabase("test");
+            MongoCollection<Document> collection = database.getCollection(
+                    "myCollection");
 
-        long initial_count = collection.count();
-        Document doc = new Document("key", "value");
-        collection.insertOne(doc);
+            long initial_count = collection.count();
+            Document doc = new Document("key", "value");
+            collection.insertOne(doc);
 
-        Document doc2 = new Document("name", "MongoDB")
-            .append("type", "database")
-            .append("count", 1)
-            .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
-            .append("info", new Document("x", 203).append("y", 102));
-        collection.insertOne(doc2);
-        collection.deleteMany(Filters.eq("name", "MongoDB"));
+            Document doc2 = new Document("name", "MongoDB")
+                .append("type", "database")
+                .append("count", 1)
+                .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
+                .append("info", new Document("x", 203).append("y", 102));
+            collection.insertOne(doc2);
+            collection.deleteMany(Filters.eq("name", "MongoDB"));
 
-        long final_count = collection.count();
-        assertEquals(initial_count + 1, final_count);
+            long final_count = collection.count();
+            assertEquals(initial_count + 1, final_count);
+        } catch (AssertionError error) {
+            this.er = error;
+        }
+    }
+
+    public AssertionError getException() {
+        return this.er;
     }
 }
