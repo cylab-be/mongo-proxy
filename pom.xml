@@ -192,6 +192,7 @@
             <build>
                 <plugins>
                     <!-- to sign the jars with a GPG key -->
+                    <!-- to run, use mvn clean install -Drelease=true" -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
