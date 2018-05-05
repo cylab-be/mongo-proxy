@@ -37,6 +37,7 @@ public class Document {
     private LinkedList<Element> elements;
 
     /**
+     * Read Bson document from a Bytes array.
      *
      * @param msg
      * @param start
@@ -44,13 +45,10 @@ public class Document {
     public Document(final byte[] msg, final int start) {
         this.start = start;
         size = readInt(msg, start);
-        // System.out.println("Document length: " + size);
-        // System.out.println("Document end: " + (start + size));
 
         elements = new LinkedList<>();
         int pointer = start + 4;
         while (pointer < (start + size - 1)) {
-            //System.out.println("Pointer position: " + pointer);
             Element el = readElement(msg, pointer);
             elements.add(el);
             pointer += el.size();
@@ -68,6 +66,7 @@ public class Document {
     }
 
     /**
+     * reconstruct the parts of the document.
      *
      * @param msg
      * @param start
@@ -79,6 +78,7 @@ public class Document {
     }
 
     /**
+     * Extract a Byte from a Bytes array.
      *
      * @param msg
      * @param start
@@ -97,6 +97,7 @@ public class Document {
     }
 
     /**
+     * Read a part of document.
      *
      * @param index
      * @return

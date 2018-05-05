@@ -24,6 +24,7 @@
 package be.cylab.mongoproxy;
 
 /**
+ * Boolean part in BSON document structure.
  *
  * @author tibo
  */

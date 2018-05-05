@@ -27,6 +27,7 @@ package be.cylab.mongoproxy;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import java.util.Arrays;
 import org.bson.Document;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class ProxyServerTest {
     public final void testRun() throws InterruptedException, Exception {
 
         System.out.println("Start the proxy server...");
-        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
+        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
         Thread srv_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -95,7 +96,7 @@ class TestRunnable implements Runnable {
     @Override
     public void run() {
         MongoClient mongo = new MongoClient("localhost", ProxyServerTest.PORT);
-        MongoDatabase database = mongo.getDatabase("myDb");
+        MongoDatabase database = mongo.getDatabase("test");
         MongoCollection<Document> collection = database.getCollection(
                 "myCollection");
 
@@ -109,6 +110,7 @@ class TestRunnable implements Runnable {
             .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
             .append("info", new Document("x", 203).append("y", 102));
         collection.insertOne(doc2);
+        collection.deleteMany(Filters.eq("name","MongoDB"));
 
         long final_count = collection.count();
         assertEquals(initial_count + 2, final_count);

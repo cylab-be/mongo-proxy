@@ -37,6 +37,18 @@ import java.util.Arrays;
 public abstract class Element<T> {
 
     private T value;
+    private final int type;
+    private final String name;
+
+    /**
+     *
+     * @param type
+     * @param name
+     */
+    Element(final int type, final String name) {
+        this.type = type;
+        this.name = name;
+    }
 
     /**
      *
@@ -56,6 +68,7 @@ public abstract class Element<T> {
     }
 
     /**
+     * Read id object of BSON document from a byte array.
      *
      * @param msg
      * @param start
@@ -63,19 +76,6 @@ public abstract class Element<T> {
      */
     private static byte[] readObjectId(final byte[] msg, final int start) {
         return Arrays.copyOfRange(msg, start, start + 12);
-    }
-
-    private final int type;
-    private final String name;
-
-    /**
-     *
-     * @param type
-     * @param name
-     */
-    Element(final int type, final String name) {
-        this.type = type;
-        this.name = name;
     }
 
     /**
@@ -95,6 +95,7 @@ public abstract class Element<T> {
     }
 
     /**
+     * Parse the Bytes array to extract part of BSON document.
      *
      * @param msg
      * @param start

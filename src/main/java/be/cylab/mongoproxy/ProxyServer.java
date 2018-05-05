@@ -71,7 +71,7 @@ public class ProxyServer {
             }
 
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
 
@@ -127,7 +127,7 @@ class ConnectionHandler implements Runnable {
             InputStream srv_in = srv_socket.getInputStream();
 
             while (true) {
-                // System.out.println("Read from client...");
+
                 byte[] msg = readMessage(client_in);
 
                 int opcode = readInt(msg, 12);
@@ -138,20 +138,14 @@ class ConnectionHandler implements Runnable {
                     processQuery(msg);
                 }
 
-                if (opcode == 2002) {
-                    processInsert(msg);
-                }
-
-                //System.out.println("Write same message to server");
                 srv_out.write(msg);
 
-                //System.out.println("Read from server");
                 byte[] response = readMessage(srv_in);
 
                 client_out.write(response);
             }
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
 
@@ -169,7 +163,7 @@ class ConnectionHandler implements Runnable {
     public static final char STRING_TERMINATION = 0x00;
 
     /**
-     * Read a string from the byte array.
+     * Read a Cstring from the byte array.
      *
      * @param msg
      * @param start
@@ -187,6 +181,7 @@ class ConnectionHandler implements Runnable {
     }
 
     /**
+     * Read a string from the byte array.
      *
      * @param msg
      * @param start
@@ -197,6 +192,7 @@ class ConnectionHandler implements Runnable {
     }
 
     /**
+     * process the OP_QUERY request.
      *
      * @param msg
      */
@@ -251,15 +247,16 @@ class ConnectionHandler implements Runnable {
         int lentgh_2 = stream.read();
         int lentgh_3 = stream.read();
         int lentgh_4 = stream.read();
+
         // Value is little endian:
         final int msg_length = lentgh_1 + lentgh_2 * 256
                 + lentgh_3 * 256 * 256 + lentgh_4 * 256 * 256 * 256;
-        //System.out.println("Message length: " + msg_length);
 
         // 2. content of message
         byte[] msg = new byte[msg_length];
         int offset = 4;
         while (offset < msg_length) {
+
             //read the stream and skip the 4 first bytes
             int tmp = stream.read(msg, offset, (msg_length - offset));
             offset += tmp;
@@ -275,7 +272,7 @@ class ConnectionHandler implements Runnable {
     }
 
     /**
-     * Consersion of 4bytes to a single int.
+     * Consertion of 4bytes to a single int.
      *
      * @param bytes
      * @param start
@@ -289,11 +286,4 @@ class ConnectionHandler implements Runnable {
                 | (bytes[start]) & 0x000000ff;
     }
 
-    /**
-     *
-     * @param msg
-     */
-    protected void processInsert(final byte[] msg) {
-
-    }
 }
