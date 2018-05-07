@@ -42,6 +42,14 @@ public class DummyElement extends Element<Object> {
      *
      * @return
      */
+    public boolean isString() {
+        return false;
+    }
+
+    /**
+     *
+     * @return
+     */
     @Override
     public Object value() {
         return null;

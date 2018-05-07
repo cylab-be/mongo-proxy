@@ -58,6 +58,14 @@ public abstract class Element<T> {
 
     /**
      *
+     * @return
+     */
+    public boolean isString() {
+        return false;
+    }
+
+    /**
+     *
      * @param msg
      * @param start
      * @return

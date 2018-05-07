@@ -59,7 +59,7 @@ public class ProxyServerTest {
             @Override
             public void run() {
                 ProxyServer srv = new ProxyServer(PORT);
-                srv.addListener("admin.$cmd", new Listener() {
+                srv.addListener("myDb","myCollection", new Listener() {
                     @Override
                     public void run(
                             final be.cylab.mongoproxy.Document doc) {
@@ -107,7 +107,7 @@ class ClientTest implements Runnable {
         try {
             MongoClient mongo = new MongoClient(
                     "localhost", ProxyServerTest.PORT);
-            MongoDatabase database = mongo.getDatabase("test");
+            MongoDatabase database = mongo.getDatabase("myDb");
             MongoCollection<Document> collection = database.getCollection(
                     "myCollection");
 
@@ -121,10 +121,10 @@ class ClientTest implements Runnable {
                 .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
                 .append("info", new Document("x", 203).append("y", 102));
             collection.insertOne(doc2);
-            collection.deleteMany(Filters.eq("name", "MongoDB"));
+            //collection.deleteMany(Filters.eq("name", "MongoDB"));
 
             long final_count = collection.count();
-            assertEquals(initial_count + 1, final_count);
+            assertEquals(initial_count + 2, final_count);
         } catch (AssertionError error) {
             this.er = error;
         }

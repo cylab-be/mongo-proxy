@@ -48,10 +48,12 @@ public class Document {
 
         elements = new LinkedList<>();
         int pointer = start + 4;
+
         while (pointer < (start + size - 1)) {
             Element el = readElement(msg, pointer);
             elements.add(el);
             pointer += el.size();
+
         }
 
     }
@@ -94,6 +96,14 @@ public class Document {
      */
     public final String toString() {
         return elements.toString();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isString() {
+        return false;
     }
 
     /**

@@ -77,16 +77,19 @@ public class ProxyServer {
 
     /**
      *
+     * @param db
      * @param collection
      * @param listener
      */
-    public final void addListener(final String collection,
+    public final void addListener(final String db, final String collection,
             final Listener listener) {
+        String collection_request = db + ".$cmd" + collection;
         LinkedList<Listener> collection_listeners
-                = listeners.getOrDefault(collection, new LinkedList<>());
+                = listeners.getOrDefault(
+                        collection_request, new LinkedList<>());
 
         collection_listeners.add(listener);
-        listeners.put(collection, collection_listeners);
+        listeners.put(collection_request, collection_listeners);
     }
 
 }
@@ -194,34 +197,45 @@ class ConnectionHandler implements Runnable {
     /**
      * process the OP_QUERY request.
      *
-     * @param msg
+     * in the documentation of the MONGO wire protocol, the reading of the name
+     * of the collection manipulated begin at the 20th byte, but because of the
+     * version of the MONGO driver we use (3.5.0) the series of bytes
+     * corresponds rather to the name of the DB and the name of the collection
+     * manipulated is contained in the document.
+     *
+     * @param msg byte array that contain the client message to the DB.
      */
     public void processQuery(final byte[] msg) {
 
         //get collection name to run listner if find
         String collection_name = readCString(msg, 20);
 
-        logger.debug("collection name: {}", collection_name);
-
         //get documment in msg
         Document doc = new Document(msg, 29 + collection_name.length());
-        //System.out.println("Document: " + doc);
+
+        //check if the first part of the document is ElementString
+        Boolean is_string = doc.get(0).isString();
+
+        if (is_string) {
+
+            //create key of the listener
+            String collection_request = collection_name + doc.get(0).value();
+
+            LinkedList<Listener> collection_listeners = listeners.get(
+                    collection_request);
+
+            for (Listener listener : collection_listeners) {
+
+                listener.run(doc);
+                logger.info("listner running...");
+            }
+
+        }
+
         logger.debug("Document: {}", doc.toString());
 
-        //find collection in the liste of listners
-        LinkedList<Listener> collection_listeners = listeners.get(
-                collection_name);
+        logger.debug("collection name: {}", collection_name);
 
-        if (collection_listeners == null) {
-            return;
-        }
-
-        for (Listener listener : collection_listeners) {
-            listener.run(doc);
-
-            logger.info("listner running...");
-
-        }
     }
 
     /**

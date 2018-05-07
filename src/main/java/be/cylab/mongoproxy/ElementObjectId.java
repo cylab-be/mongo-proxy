@@ -56,6 +56,14 @@ public class ElementObjectId extends Element<byte[]> {
      *
      * @return
      */
+    public boolean isString() {
+        return false;
+    }
+
+    /**
+     *
+     * @return
+     */
     public String toString() {
         return super.toString() + ":" + byteArrayToHex(value);
     }

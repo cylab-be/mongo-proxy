@@ -52,6 +52,14 @@ public class ElementInt extends Element<Integer> {
      *
      * @return
      */
+    public boolean isString() {
+        return false;
+    }
+
+    /**
+     *
+     * @return
+     */
     public String toString() {
         return super.toString() + ":" + value;
     }

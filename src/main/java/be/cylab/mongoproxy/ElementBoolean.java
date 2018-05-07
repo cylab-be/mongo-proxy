@@ -57,6 +57,14 @@ public class ElementBoolean extends Element<Boolean> {
      *
      * @return
      */
+    public boolean isString() {
+        return false;
+    }
+
+    /**
+     *
+     * @return
+     */
     public int size() {
         return super.size() + 1;
     }

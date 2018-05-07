@@ -24,7 +24,7 @@
 package be.cylab.mongoproxy;
 
 /**
- *Document part in BSON structure.
+ * Document part in BSON structure.
  *
  * @author tibo
  */
@@ -58,6 +58,14 @@ public class ElementDocument extends Element<Document> {
      */
     public String toString() {
         return super.toString() + ":" + value.toString();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isString() {
+        return false;
     }
 
     @Override
