@@ -37,7 +37,7 @@ public class Document {
     private LinkedList<Element> elements;
 
     /**
-     * Read Bson document from a Bytes array.
+     * Read BSON document from a Bytes array.
      *
      * @param msg
      * @param start

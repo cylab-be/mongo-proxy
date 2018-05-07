@@ -27,7 +27,6 @@ package be.cylab.mongoproxy;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 import java.util.Arrays;
 import org.bson.Document;
 import org.junit.Test;
@@ -54,6 +53,7 @@ public class ProxyServerTest {
         System.out.println("Start the proxy server...");
         System.setProperty(
                 org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
+<<<<<<< Updated upstream
 
         Thread srv_thread = new Thread(new Runnable() {
             @Override
@@ -67,6 +67,24 @@ public class ProxyServerTest {
                     }
                 });
                 srv.run();
+=======
+        Thread srv_thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ProxyServer srv = new ProxyServer(PORT);
+                    srv.addListener("myDb","myCollection", new Listener() {
+                        @Override
+                        public void run(
+                                final be.cylab.mongoproxy.Document doc) {
+                            System.out.println("Notified: " + doc);
+                        }
+                    });
+                    srv.run();
+                } catch (Exception ex) {
+                    srv_thread_exception = ex;
+                }
+>>>>>>> Stashed changes
             }
         });
 
@@ -104,6 +122,7 @@ class ClientTest implements Runnable {
 
     @Override
     public void run() {
+<<<<<<< Updated upstream
         try {
             MongoClient mongo = new MongoClient(
                     "localhost", ProxyServerTest.PORT);
@@ -132,5 +151,26 @@ class ClientTest implements Runnable {
 
     public AssertionError getException() {
         return this.er;
+=======
+        MongoClient mongo = new MongoClient("localhost", ProxyServerTest.PORT);
+        MongoDatabase database = mongo.getDatabase("myDb");
+        MongoCollection<Document> collection = database.getCollection(
+                "myCollection");
+ 
+        long initial_count = collection.count();
+        Document doc = new Document("key", "value");
+        collection.insertOne(doc);
+
+        System.out.println("Insert...");
+        Document doc2 = new Document("name", "MongoDB")
+            .append("type", "database")
+            .append("count", 1)
+            .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
+            .append("info", new Document("x", 203).append("y", 102));
+        collection.insertOne(doc2);
+
+        long final_count = collection.count();
+        assertEquals(initial_count + 2, final_count);
+>>>>>>> Stashed changes
     }
 }

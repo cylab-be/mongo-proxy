@@ -83,7 +83,13 @@ public class ProxyServer {
      */
     public final void addListener(final String db, final String collection,
             final Listener listener) {
+<<<<<<< Updated upstream
         String collection_request = db + ".$cmd" + collection;
+=======
+
+        String collection_request = db + "." + collection;
+        logger.info("collection request: {}", collection_request);
+>>>>>>> Stashed changes
         LinkedList<Listener> collection_listeners
                 = listeners.getOrDefault(
                         collection_request, new LinkedList<>());
@@ -212,6 +218,13 @@ class ConnectionHandler implements Runnable {
 
         //get documment in msg
         Document doc = new Document(msg, 29 + collection_name.length());
+<<<<<<< Updated upstream
+=======
+        //System.out.println("Document: " + doc);
+        //logger.debug("Document: {}", doc.toString());
+
+        System.out.println("doc: " + doc.toString());
+>>>>>>> Stashed changes
 
         //check if the first part of the document is ElementString
         Boolean is_string = doc.get(0).isString();
