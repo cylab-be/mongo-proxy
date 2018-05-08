@@ -82,7 +82,7 @@ public enum OpCode {
 
     /**
      *
-     * @param code
+     * @param code code of the request.
      */
     OpCode(final int code) {
         this.code = code;
@@ -90,7 +90,7 @@ public enum OpCode {
 
     /**
      *
-     * @return
+     * @return an integer.
      */
     public int getValue() {
         return code;
@@ -99,8 +99,8 @@ public enum OpCode {
     /**
      * Find opcode from it's numerical value.
      *
-     * @param value
-     * @return
+     * @param value code of the request.
+     * @return an Opcode.
      */
     public static OpCode findByValue(final int value) {
         for (OpCode opcode : values()) {

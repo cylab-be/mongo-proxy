@@ -17,7 +17,7 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT,TORT OR OTHERWISE, ARISIFNG FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
@@ -48,7 +48,7 @@ public class ProxyServer {
 
     /**
      *
-     * @param port
+     * @param port port on which the proxy will listen.
      */
     public ProxyServer(final int port) {
         this.port = port;
@@ -77,9 +77,9 @@ public class ProxyServer {
 
     /**
      *
-     * @param db
-     * @param collection
-     * @param listener
+     * @param db name of the database
+     * @param collection name of the collection
+     * @param listener listener used for notification
      */
     public final void addListener(final String db, final String collection,
             final Listener listener) {
@@ -110,8 +110,8 @@ class ConnectionHandler implements Runnable {
 
     /**
      *
-     * @param client
-     * @param listeners
+     * @param client socket of the proxy user.
+     * @param listeners HashMap of listeners used for notified collection.
      */
     ConnectionHandler(final Socket client, final HashMap<String, LinkedList<
             Listener>> listeners) {
@@ -157,8 +157,8 @@ class ConnectionHandler implements Runnable {
     /**
      * Get the name of this opcode.
      *
-     * @param opcode
-     * @return
+     * @param opcode code of the request.
+     * @return a String.
      */
     public String getOpcodeName(final int opcode) {
         return OpCode.findByValue(opcode).name();
@@ -170,9 +170,9 @@ class ConnectionHandler implements Runnable {
     /**
      * Read a Cstring from the byte array.
      *
-     * @param msg
-     * @param start
-     * @return
+     * @param msg byte array which contain the message.
+     * @param start byte position from which the reading will begin.
+     * @return a Sting.
      */
     public static String readCString(final byte[] msg, final int start) {
         StringBuilder string = new StringBuilder();
@@ -188,9 +188,9 @@ class ConnectionHandler implements Runnable {
     /**
      * Read a string from the byte array.
      *
-     * @param msg
-     * @param start
-     * @return
+     * @param msg byte array which contain the message.
+     * @param start byte position from which the reading will begin.
+     * @return a String.
      */
     public static String readString(final byte[] msg, final int start) {
         return readCString(msg, start + 4);
@@ -199,13 +199,13 @@ class ConnectionHandler implements Runnable {
     /**
      * process the OP_QUERY request.
      *
-     * in the documentation of the MONGO wire protocol, the reading of the name
-     * of the collection manipulated begin at the 20th byte, but because of the
+     * in the documentation of the MONGO wire protocol, the reading of the
+     * collection name manipulated begin at the 20th byte, but because of the
      * version of the MONGO driver we use (3.5.0) the series of bytes
      * corresponds rather to the name of the DB and the name of the collection
      * manipulated is contained in the document.
      *
-     * @param msg byte array that contain the client message to the DB.
+     * @param msg byte array which contain the message.
      */
     public void processQuery(final byte[] msg) {
 
@@ -215,11 +215,7 @@ class ConnectionHandler implements Runnable {
         //get documment in msg
         Document doc = new Document(msg, 29 + collection_name.length());
 
-        //System.out.println("Document: " + doc);
-        //logger.debug("Document: {}", doc.toString());
-
         System.out.println("doc: " + doc.toString());
-
 
         //check if the first part of the document is ElementString
         Boolean is_string = doc.get(0).isString();
@@ -249,8 +245,8 @@ class ConnectionHandler implements Runnable {
     /**
      * Read the complete message to a Byte array.
      *
-     * @param stream
-     * @return
+     * @param stream stream were the message is extract to a byte array.
+     * @return a Byte array.
      * @throws IOException
      * @throws Exception
      */
@@ -296,8 +292,8 @@ class ConnectionHandler implements Runnable {
     /**
      * Consertion of 4bytes to a single int.
      *
-     * @param bytes
-     * @param start
+     * @param bytes array were the integer will be read.
+     * @param start byte position from which the reading will begin.
      * @return
      */
     protected static int readInt(final byte[] bytes, final int start) {

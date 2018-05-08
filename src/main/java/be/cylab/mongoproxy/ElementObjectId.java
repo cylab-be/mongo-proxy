@@ -34,9 +34,9 @@ public class ElementObjectId extends Element<byte[]> {
 
     /**
      *
-     * @param type
-     * @param name
-     * @param value
+     * @param type Element type.
+     * @param name Element name.
+     * @param value Element value.
      */
     public ElementObjectId(final int type, final String name,
             final byte[] value) {
@@ -46,7 +46,7 @@ public class ElementObjectId extends Element<byte[]> {
 
     /**
      *
-     * @return
+     * @return an integer.
      */
     public int size() {
         return super.size() + 12;
@@ -54,7 +54,7 @@ public class ElementObjectId extends Element<byte[]> {
 
     /**
      *
-     * @return
+     * @return false using to compare if the class object return a String value.
      */
     public boolean isString() {
         return false;
@@ -62,7 +62,7 @@ public class ElementObjectId extends Element<byte[]> {
 
     /**
      *
-     * @return
+     * @return a Sting.
      */
     public String toString() {
         return super.toString() + ":" + byteArrayToHex(value);
@@ -70,8 +70,8 @@ public class ElementObjectId extends Element<byte[]> {
 
     /**
      *
-     * @param bytes
-     * @return
+     * @param bytes byte array from which the string will be read.
+     * @return a String.
      */
     public static String byteArrayToHex(final byte[] bytes) {
         StringBuilder sb = new StringBuilder(bytes.length * 2);

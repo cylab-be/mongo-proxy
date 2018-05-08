@@ -34,9 +34,9 @@ public class ElementString extends Element<String> {
 
     /**
      *
-     * @param type
-     * @param name
-     * @param value
+     * @param type Element type.
+     * @param name Element name.
+     * @param value Element value.
      */
     public ElementString(
             final int type, final String name, final String value) {
@@ -46,7 +46,7 @@ public class ElementString extends Element<String> {
 
     /**
      *
-     * @return
+     * @return a string.
      */
     public String toString() {
         return super.toString() + ":" + value;
@@ -54,7 +54,7 @@ public class ElementString extends Element<String> {
 
     /**
      *
-     * @return
+     * @return true using to compare if the class object return a String value.
      */
     public boolean isString() {
         return true;
@@ -62,7 +62,7 @@ public class ElementString extends Element<String> {
 
     /**
      *
-     * @return
+     * @return an integer.
      */
     public int size() {
         return super.size() + value.length() + 3;

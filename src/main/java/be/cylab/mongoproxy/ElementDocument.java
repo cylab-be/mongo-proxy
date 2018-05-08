@@ -34,9 +34,9 @@ public class ElementDocument extends Element<Document> {
 
     /**
      *
-     * @param type
-     * @param name
-     * @param value
+     * @param type Element type.
+     * @param name Element name.
+     * @param value Element value.
      */
     public ElementDocument(final int type, final String name,
             final Document value) {
@@ -46,7 +46,7 @@ public class ElementDocument extends Element<Document> {
 
     /**
      *
-     * @return
+     * @return an integer.
      */
     public int size() {
         return super.size() + value.size();
@@ -54,7 +54,7 @@ public class ElementDocument extends Element<Document> {
 
     /**
      *
-     * @return
+     * @return a String.
      */
     public String toString() {
         return super.toString() + ":" + value.toString();
@@ -62,7 +62,7 @@ public class ElementDocument extends Element<Document> {
 
     /**
      *
-     * @return
+     * @return false using to compare if the class object return a String value.
      */
     public boolean isString() {
         return false;

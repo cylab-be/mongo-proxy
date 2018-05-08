@@ -31,8 +31,8 @@ public class DummyElement extends Element<Object> {
 
     /**
      *
-     * @param type
-     * @param name
+     * @param type type of Element
+     * @param name name of Element
      */
     public DummyElement(final int type, final String name) {
         super(type, name);
@@ -40,7 +40,7 @@ public class DummyElement extends Element<Object> {
 
     /**
      *
-     * @return
+     * @return false using to compare if the class object return a String value.
      */
     public boolean isString() {
         return false;
@@ -48,7 +48,7 @@ public class DummyElement extends Element<Object> {
 
     /**
      *
-     * @return
+     * @return null value.
      */
     @Override
     public Object value() {

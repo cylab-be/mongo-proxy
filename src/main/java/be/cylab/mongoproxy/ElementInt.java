@@ -34,9 +34,9 @@ public class ElementInt extends Element<Integer> {
 
     /**
      *
-     * @param type
-     * @param name
-     * @param value
+     * @param type Element type.
+     * @param name Element name.
+     * @param value Element value.
      */
     public ElementInt(final int type, final String name, final int value) {
         super(type, name);
@@ -50,7 +50,7 @@ public class ElementInt extends Element<Integer> {
 
     /**
      *
-     * @return
+     * @return false using to compare if the class object return a String value.
      */
     public boolean isString() {
         return false;
@@ -58,7 +58,7 @@ public class ElementInt extends Element<Integer> {
 
     /**
      *
-     * @return
+     * @return a String.
      */
     public String toString() {
         return super.toString() + ":" + value;

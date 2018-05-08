@@ -42,8 +42,8 @@ public abstract class Element<T> {
 
     /**
      *
-     * @param type
-     * @param name
+     * @param type Element type.
+     * @param name Element Name.
      */
     Element(final int type, final String name) {
         this.type = type;
@@ -52,13 +52,13 @@ public abstract class Element<T> {
 
     /**
      *
-     * @return
+     * @return T value.
      */
     public abstract T value();
 
     /**
      *
-     * @return
+     * @return false using to compare if the class object return a String value.
      */
     public boolean isString() {
         return false;
@@ -66,9 +66,9 @@ public abstract class Element<T> {
 
     /**
      *
-     * @param msg
-     * @param start
-     * @return
+     * @param msg bytes array from which the boolean  will be read.
+     * @param start byte position from which the reading will begin.
+     * @return a boolean.
      */
     public static boolean readBoolean(final byte[] msg, final int start) {
         byte b = readByte(msg, start);
@@ -78,9 +78,9 @@ public abstract class Element<T> {
     /**
      * Read id object of BSON document from a byte array.
      *
-     * @param msg
-     * @param start
-     * @return
+     * @param msg bytes array from which the object Id  will be read.
+     * @param start byte position from which the reading will begin.
+     * @return a Byte array.
      */
     private static byte[] readObjectId(final byte[] msg, final int start) {
         return Arrays.copyOfRange(msg, start, start + 12);
@@ -88,7 +88,7 @@ public abstract class Element<T> {
 
     /**
      *
-     * @return
+     * @return an integer.
      */
     public int size() {
         return 2 + name.length();
@@ -96,7 +96,7 @@ public abstract class Element<T> {
 
     /**
      *
-     * @return
+     * @return a String.
      */
     public String toString() {
         return type + ":" + name;
@@ -105,9 +105,9 @@ public abstract class Element<T> {
     /**
      * Parse the Bytes array to extract part of BSON document.
      *
-     * @param msg
-     * @param start
-     * @return
+     * @param msg  bytes array from which the Element  will be extract.
+     * @param start  byte position from which the reading will begin.
+     * @return an Element.
      */
     public static Element parse(final byte[] msg, final int start) {
         int type = readByte(msg, start);
@@ -148,7 +148,7 @@ public abstract class Element<T> {
 
     /**
      *
-     * @return
+     * @return a T value.
      */
     public T getValue() {
         return value;

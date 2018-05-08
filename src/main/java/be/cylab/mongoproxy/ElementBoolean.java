@@ -34,9 +34,9 @@ public class ElementBoolean extends Element<Boolean> {
 
     /**
      *
-     * @param type
-     * @param name
-     * @param value
+     * @param type Element type.
+     * @param name Element name.
+     * @param value Element value.
      */
     public ElementBoolean(final int type, final String name,
             final boolean value) {
@@ -47,7 +47,7 @@ public class ElementBoolean extends Element<Boolean> {
 
     /**
      *
-     * @return
+     * @return a String.
      */
     public String toString() {
         return super.toString() + ":" + value;
@@ -55,7 +55,7 @@ public class ElementBoolean extends Element<Boolean> {
 
     /**
      *
-     * @return
+     * @return false using to compare if the class object return a String value.
      */
     public boolean isString() {
         return false;
@@ -63,7 +63,7 @@ public class ElementBoolean extends Element<Boolean> {
 
     /**
      *
-     * @return
+     * @return an integer.
      */
     public int size() {
         return super.size() + 1;

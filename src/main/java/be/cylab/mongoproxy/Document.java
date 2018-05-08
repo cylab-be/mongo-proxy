@@ -39,8 +39,8 @@ public class Document {
     /**
      * Read BSON document from a Bytes array.
      *
-     * @param msg
-     * @param start
+     * @param msg bytes array from which the BSON will be read.
+     * @param start byte position from which the reading will begin.
      */
     public Document(final byte[] msg, final int start) {
         this.start = start;
@@ -61,7 +61,7 @@ public class Document {
     /**
      * size of the document.
      *
-     * @return
+     * @return an integer
      */
     public int size() {
         return size;
@@ -70,9 +70,9 @@ public class Document {
     /**
      * reconstruct the parts of the document.
      *
-     * @param msg
-     * @param start
-     * @return
+     * @param msg bytes array from which the BSON will be read.
+     * @param start byte position from which the reading will begin.
+     * @return an object of type Element.
      */
     public final Element readElement(final byte[] msg, final int start) {
 
@@ -82,9 +82,9 @@ public class Document {
     /**
      * Extract a Byte from a Bytes array.
      *
-     * @param msg
-     * @param start
-     * @return
+     * @param msg bytes array from which the BSON will be read.
+     * @param start byte position from which the reading will begin.
+     * @return a byte.
      */
     public static final Byte readByte(final byte[] msg, final int start) {
         return msg[start];
@@ -92,7 +92,7 @@ public class Document {
 
     /**
      *
-     * @return
+     * @return display document.
      */
     public final String toString() {
         return elements.toString();
@@ -100,7 +100,7 @@ public class Document {
 
     /**
      *
-     * @return
+     * @return false using to compare if the class object return a String value.
      */
     public boolean isString() {
         return false;
@@ -109,8 +109,8 @@ public class Document {
     /**
      * Read a part of document.
      *
-     * @param index
-     * @return
+     * @param index index of the Element type in the list of element.
+     * @return an object of type Element.
      */
     public Element get(final int index) {
 
