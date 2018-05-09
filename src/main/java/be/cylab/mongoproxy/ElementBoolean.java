@@ -55,10 +55,11 @@ public class ElementBoolean extends Element<Boolean> {
 
     /**
      *
-     * @return false using to compare if the class object return a String value.
+     * @return true if the return class is ElementBoolean.
      */
-    public boolean isString() {
-        return false;
+    @Override
+    public boolean isBoolean() {
+        return true;
     }
 
     /**

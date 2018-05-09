@@ -135,7 +135,7 @@ class ConnectionHandler implements Runnable {
 
                 byte[] msg = readMessage(client_in);
 
-                int opcode = Read.Int(msg, 12);
+                int opcode = Read.iNt(msg, 12);
 
                 logger.info("Opcode: {}", OpCode.getOpcodeName(opcode));
 
@@ -170,7 +170,7 @@ class ConnectionHandler implements Runnable {
     public void processQuery(final byte[] msg) {
 
         //get collection name to run listner if find
-        String collection_name = Read.CString(msg, 20);
+        String collection_name = Read.cString(msg, 20);
 
         //get documment in msg
         Document doc = new Document(msg, 29 + collection_name.length());

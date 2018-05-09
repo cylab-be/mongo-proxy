@@ -52,6 +52,7 @@ public class ElementInt extends Element<Integer> {
      *
      * @return true if the return class is ElementInt.
      */
+    @Override
     public boolean isInt() {
         return true;
     }

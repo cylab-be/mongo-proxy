@@ -54,10 +54,11 @@ public class ElementObjectId extends Element<byte[]> {
 
     /**
      *
-     * @return false using to compare if the class object return a String value.
+     * @return true if the return class is ElementObjectId.
      */
-    public boolean isString() {
-        return false;
+    @Override
+    public boolean isObjectId() {
+        return true;
     }
 
     /**

@@ -60,12 +60,13 @@ public class ElementDocument extends Element<Document> {
         return super.toString() + ":" + value.toString();
     }
 
-    /**
+     /**
      *
-     * @return false using to compare if the class object return a String value.
+     * @return true if the return class is ElementDocument.
      */
-    public boolean isString() {
-        return false;
+    @Override
+    public boolean isDocument() {
+        return true;
     }
 
     @Override

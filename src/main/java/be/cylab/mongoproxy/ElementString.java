@@ -54,10 +54,11 @@ public class ElementString extends Element<String> {
 
     /**
      *
-     * @return true using to compare if the class object return a String value.
+     * @return true if the return class is ElementSting.
      */
+    @Override
     public boolean isString() {
-        return true;
+        return false;
     }
 
     /**

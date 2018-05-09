@@ -83,7 +83,7 @@ public abstract class Element<T> {
     public boolean isDocument() {
         return false;
     }
-    
+
     /**
      *
      * @return true if the return class is ElementObjectId.
@@ -99,7 +99,7 @@ public abstract class Element<T> {
      * @return a boolean.
      */
     public static boolean readBoolean(final byte[] msg, final int start) {
-        byte b = Read.Byte(msg, start);
+        byte b = Read.bYte(msg, start);
         return b == 1;
     }
 
@@ -138,16 +138,16 @@ public abstract class Element<T> {
      * @return an Element.
      */
     public static Element parse(final byte[] msg, final int start) {
-        int type = Read.Byte(msg, start);
-        String name = Read.CString(msg, start + 1);
+        int type = Read.bYte(msg, start);
+        String name = Read.cString(msg, start + 1);
 
         if (type == 16) {
-            int value = Read.Int(msg, start + name.length() + 2);
+            int value = Read.iNt(msg, start + name.length() + 2);
             return new ElementInt(type, name, value);
         }
 
         if (type == 2) {
-            String value = Read.String(msg, start + name.length() + 2);
+            String value = Read.sTring(msg, start + name.length() + 2);
             return new ElementString(type, name, value);
         }
 

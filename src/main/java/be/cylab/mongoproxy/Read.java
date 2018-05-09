@@ -27,8 +27,17 @@ package be.cylab.mongoproxy;
  *
  * @author sonoflight
  */
-public class Read {
+public final class Read {
 
+    /**
+     * Read constructor.
+     */
+    private Read() {
+    }
+
+    /**
+     *
+     */
     public static final char STRING_TERMINATION = 0;
 
     /**
@@ -38,7 +47,7 @@ public class Read {
      * @param start byte position from which the reading will begin.
      * @return a Sting.
      */
-    public static String CString(final byte[] msg, final int start) {
+    public static String cString(final byte[] msg, final int start) {
         StringBuilder string = new StringBuilder();
         int i = start;
         while (msg[i] != STRING_TERMINATION) {
@@ -55,8 +64,8 @@ public class Read {
      * @param start byte position from which the reading will begin.
      * @return a String.
      */
-    public static String String(final byte[] msg, final int start) {
-        return CString(msg, start + 4);
+    public static String sTring(final byte[] msg, final int start) {
+        return cString(msg, start + 4);
     }
 
     /**
@@ -66,7 +75,7 @@ public class Read {
      * @param start byte position from which the reading will begin.
      * @return an integer.
      */
-    protected static int Int(final byte[] bytes, final int start) {
+    protected static int iNt(final byte[] bytes, final int start) {
         return (bytes[start + 3] << 24) & -16777216 | (
                 bytes[start + 2] << 16) & 16711680 | (
                 bytes[start + 1] << 8) & 65280 | (
@@ -80,7 +89,7 @@ public class Read {
      * @param start byte position from which the reading will begin.
      * @return a byte.
      */
-    public static final Byte Byte(final byte[] msg, final int start) {
+    public static Byte bYte(final byte[] msg, final int start) {
         return msg[start];
     }
 
@@ -91,7 +100,7 @@ public class Read {
      * @param start byte position from which the reading will begin.
      * @return an object of type Element.
      */
-    public static final Element Element(final byte[] msg, final int start) {
+    public static Element eLement(final byte[] msg, final int start) {
         return Element.parse(msg, start);
     }
 
