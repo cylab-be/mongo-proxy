@@ -37,19 +37,21 @@ import org.slf4j.LoggerFactory;
  */
 class ConnectionHandler implements Runnable {
 
-    private static final int PORT_DB = 27017;
-    private final Logger logger = LoggerFactory.getLogger(ConnectionHandler.class);
+    private final int port_db;
+    private final String ip;
+    private final Logger logger = LoggerFactory.getLogger(
+            ConnectionHandler.class);
     private final Socket client;
     private final HashMap<String, LinkedList<Listener>> listeners;
 
-    /**
-     *
-     * @param client socket of the proxy user.
-     * @param listeners HashMap of listeners used for notified collection.
-     */
-    ConnectionHandler(final Socket client, final HashMap<String, LinkedList<Listener>> listeners) {
+    ConnectionHandler(
+            final Socket client, final String ip, final int port_db,
+            final HashMap<String, LinkedList<Listener>> listeners) {
+
         this.client = client;
         this.listeners = listeners;
+        this.ip = ip;
+        this.port_db = port_db;
     }
 
     @Override
@@ -58,7 +60,7 @@ class ConnectionHandler implements Runnable {
             InputStream client_in = client.getInputStream();
             OutputStream client_out = client.getOutputStream();
             // Connect to server
-            Socket srv_socket = new Socket("127.0.0.1", PORT_DB);
+            Socket srv_socket = new Socket(ip, port_db);
             OutputStream srv_out = srv_socket.getOutputStream();
             InputStream srv_in = srv_socket.getInputStream();
             while (true) {
@@ -99,7 +101,8 @@ class ConnectionHandler implements Runnable {
         if (is_string) {
             //create key of the listener
             String collection_request = collection_name + doc.get(0).value();
-            LinkedList<Listener> collection_listeners = listeners.get(collection_request);
+            LinkedList<Listener> collection_listeners = listeners.get(
+                    collection_request);
             for (Listener listener : collection_listeners) {
                 listener.run(doc);
                 logger.info("listner running...");
@@ -117,7 +120,8 @@ class ConnectionHandler implements Runnable {
      * @throws IOException
      * @throws Exception
      */
-    public byte[] readMessage(final InputStream stream) throws IOException, Exception {
+    public byte[] readMessage(
+            final InputStream stream) throws IOException, Exception {
         if (stream == null) {
             throw new Exception("Stream is null!");
         }
@@ -130,7 +134,9 @@ class ConnectionHandler implements Runnable {
         int lentgh_3 = stream.read();
         int lentgh_4 = stream.read();
         // Value is little endian:
-        final int msg_length = lentgh_1 + lentgh_2 * 256 + lentgh_3 * 256 * 256 + lentgh_4 * 256 * 256 * 256;
+        final int msg_length = lentgh_1
+                + lentgh_2 * 256 + lentgh_3 * 256 * 256
+                + lentgh_4 * 256 * 256 * 256;
         // 2. content of message
         byte[] msg = new byte[msg_length];
         int offset = 4;
@@ -146,5 +152,5 @@ class ConnectionHandler implements Runnable {
         msg[3] = (byte) lentgh_4;
         return msg;
     }
-    
+
 }
