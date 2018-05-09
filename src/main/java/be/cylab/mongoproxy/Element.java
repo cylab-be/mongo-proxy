@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 tibo.
+ * Copyright 2018 Thibault Debatty.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author tibo
+ * @author Thibault Debatty
  * @param <T> type of value contained in the element
  */
 public abstract class Element<T> {

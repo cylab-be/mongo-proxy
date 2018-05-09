@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 tibo.
+ * Copyright 2018 Thibault Debatty.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@ package be.cylab.mongoproxy;
 
 /**
  *
- * @author tibo
+ * @author Thibault Debatty
  */
 public class DummyElement extends Element<Object> {
 
