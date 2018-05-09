@@ -66,22 +66,12 @@ public class Document {
         return size;
     }
 
-
-
     /**
      *
      * @return display document.
      */
     public final String toString() {
         return elements.toString();
-    }
-
-    /**
-     *
-     * @return false using to compare if the class object return a String value.
-     */
-    public boolean isString() {
-        return false;
     }
 
     /**

@@ -50,10 +50,10 @@ public class ElementInt extends Element<Integer> {
 
     /**
      *
-     * @return false using to compare if the class object return a String value.
+     * @return true if the return class is ElementInt.
      */
-    public boolean isString() {
-        return false;
+    public boolean isInt() {
+        return true;
     }
 
     /**

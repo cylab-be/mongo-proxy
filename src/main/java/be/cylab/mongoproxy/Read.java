@@ -85,7 +85,7 @@ public class Read {
     }
 
     /**
-     * reconstruct the parts of the document.
+     * reconstruct a parts of a BSON document from a byte array.
      *
      * @param msg bytes array from which the BSON will be read.
      * @param start byte position from which the reading will begin.

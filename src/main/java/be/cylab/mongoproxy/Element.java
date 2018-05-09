@@ -54,7 +54,7 @@ public abstract class Element<T> {
 
     /**
      *
-     * @return false using to compare if the class object return a String value.
+     * @return true if the return class is ElementSting.
      */
     public boolean isString() {
         return false;
@@ -62,7 +62,39 @@ public abstract class Element<T> {
 
     /**
      *
-     * @param msg bytes array from which the boolean  will be read.
+     * @return true if the return class is ElementInt.
+     */
+    public boolean isInt() {
+        return false;
+    }
+
+    /**
+     *
+     * @return true if the return class is ElementBoolean.
+     */
+    public boolean isBoolean() {
+        return false;
+    }
+
+    /**
+     *
+     * @return true if the return class is ElementDocument.
+     */
+    public boolean isDocument() {
+        return false;
+    }
+    
+    /**
+     *
+     * @return true if the return class is ElementObjectId.
+     */
+    public boolean isObjectId() {
+        return false;
+    }
+
+    /**
+     *
+     * @param msg bytes array from which the boolean will be read.
      * @param start byte position from which the reading will begin.
      * @return a boolean.
      */
@@ -74,7 +106,7 @@ public abstract class Element<T> {
     /**
      * Read id object of BSON document from a byte array.
      *
-     * @param msg bytes array from which the object Id  will be read.
+     * @param msg bytes array from which the object Id will be read.
      * @param start byte position from which the reading will begin.
      * @return a Byte array.
      */
@@ -101,8 +133,8 @@ public abstract class Element<T> {
     /**
      * Parse the Bytes array to extract part of BSON document.
      *
-     * @param msg  bytes array from which the Element  will be extract.
-     * @param start  byte position from which the reading will begin.
+     * @param msg bytes array from which the Element will be extract.
+     * @param start byte position from which the reading will begin.
      * @return an Element.
      */
     public static Element parse(final byte[] msg, final int start) {
