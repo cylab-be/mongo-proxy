@@ -63,7 +63,7 @@ class ConnectionHandler implements Runnable {
             InputStream srv_in = srv_socket.getInputStream();
             while (true) {
                 byte[] msg = readMessage(client_in);
-                int opcode = Read.iNt(msg, 12);
+                int opcode = Helper.readInt(msg, 12);
                 logger.info("Opcode: {}", OpCode.getOpcodeName(opcode));
                 if (opcode == 2004) {
                     processQuery(msg);
@@ -90,7 +90,7 @@ class ConnectionHandler implements Runnable {
      */
     public void processQuery(final byte[] msg) {
         //get collection name to run listner if find
-        String collection_name = Read.cString(msg, 20);
+        String collection_name = Helper.readCString(msg, 20);
         //get documment in msg
         Document doc = new Document(msg, 29 + collection_name.length());
         System.out.println("doc: " + doc.toString());

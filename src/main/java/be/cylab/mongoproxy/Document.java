@@ -43,13 +43,13 @@ public class Document {
      */
     public Document(final byte[] msg, final int start) {
         this.start = start;
-        size = Read.iNt(msg, start);
+        size = Helper.readInt(msg, start);
 
         elements = new LinkedList<>();
         int pointer = start + 4;
 
         while (pointer < (start + size - 1)) {
-            Element el = Read.eLement(msg, pointer);
+            Element el = Helper.readElement(msg, pointer);
             elements.add(el);
             pointer += el.size();
 
