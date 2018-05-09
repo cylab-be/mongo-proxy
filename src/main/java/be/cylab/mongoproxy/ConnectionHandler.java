@@ -95,16 +95,30 @@ class ConnectionHandler implements Runnable {
         String collection_name = Read.cString(msg, 20);
         //get documment in msg
         Document doc = new Document(msg, 29 + collection_name.length());
+        System.out.println("collection name: " + collection_name);
         System.out.println("doc: " + doc.toString());
         //check if the first part of the document is ElementString
         Boolean is_string = doc.get(0).isString();
+        System.out.println("Value: " + is_string);
         if (is_string) {
             //create key of the listener
             String collection_request = collection_name + doc.get(0).value();
+            System.out.println("collection_request: " + collection_request);
+
             LinkedList<Listener> collection_listeners = listeners.get(
                     collection_request);
+
+            Document bson = new Document(msg, 29
+                    + collection_name.length()
+                    + doc.get(0).size()
+                    + doc.get(1).size()
+                    + doc.get(2).size());
+
+            System.out.println("Bson extract: " + bson.toString());
+
             for (Listener listener : collection_listeners) {
-                listener.run(doc);
+
+                listener.run(bson);
                 logger.info("listner running...");
             }
         }

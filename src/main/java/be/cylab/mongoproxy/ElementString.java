@@ -58,7 +58,7 @@ public class ElementString extends Element<String> {
      */
     @Override
     public boolean isString() {
-        return false;
+        return true;
     }
 
     /**
