@@ -47,7 +47,6 @@ class ConnectionHandler implements Runnable {
     ConnectionHandler(
             final Socket client, final String ip, final int port_db,
             final HashMap<String, LinkedList<Listener>> listeners) {
-
         this.client = client;
         this.listeners = listeners;
         this.ip = ip;
