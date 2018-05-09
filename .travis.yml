@@ -1,4 +1,6 @@
 language: java
+services:
+  - mongodb
 script: mvn clean install -Dmaven.javadoc.skip=true -Dgpg.skip=true
 notifications:
     slack: cylab-be:VmUKJZod81wbNyfme4nyrYo8
