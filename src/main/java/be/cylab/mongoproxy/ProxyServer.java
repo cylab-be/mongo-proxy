@@ -41,10 +41,27 @@ public class ProxyServer {
             ProxyServer.class);
 
     private final int port;
+    private String ip = "127.0.0.1";
+    private int port_db = 27017;
+
     private final HashMap<String, LinkedList<Listener>> listeners
             = new HashMap<>();
 
     /**
+     *constructor for global MONGODB proxy.
+     * @param port port on which the proxy will listen.
+     * @param ip IP of the MONGODB database serve.
+     * @param port_db port of the MONGODB database serve.
+     */
+    public ProxyServer(final int port, final String ip, final int port_db) {
+        this.ip = ip;
+        this.port = port;
+        this.port_db = port_db;
+
+    }
+
+    /**
+     * Constructor for local MONGODB proxy.
      *
      * @param port port on which the proxy will listen.
      */
@@ -65,7 +82,8 @@ public class ProxyServer {
             while (true) {
                 Socket client = socket.accept();
                 logger.info("Connected");
-                new Thread(new ConnectionHandler(client, listeners)).start();
+                new Thread(new ConnectionHandler(
+                        client, ip, port_db, listeners)).start();
             }
 
         } catch (IOException ex) {
