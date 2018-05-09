@@ -135,9 +135,9 @@ class ConnectionHandler implements Runnable {
 
                 byte[] msg = readMessage(client_in);
 
-                int opcode = readInt(msg, 12);
+                int opcode = Read.Int(msg, 12);
 
-                logger.info("Opcode: {}", getOpcodeName(opcode));
+                logger.info("Opcode: {}", OpCode.getOpcodeName(opcode));
 
                 if (opcode == 2004) {
                     processQuery(msg);
@@ -154,47 +154,7 @@ class ConnectionHandler implements Runnable {
         }
     }
 
-    /**
-     * Get the name of this opcode.
-     *
-     * @param opcode code of the request.
-     * @return a String.
-     */
-    public String getOpcodeName(final int opcode) {
-        return OpCode.findByValue(opcode).name();
 
-    }
-
-    public static final char STRING_TERMINATION = 0x00;
-
-    /**
-     * Read a Cstring from the byte array.
-     *
-     * @param msg byte array which contain the message.
-     * @param start byte position from which the reading will begin.
-     * @return a Sting.
-     */
-    public static String readCString(final byte[] msg, final int start) {
-        StringBuilder string = new StringBuilder();
-        int i = start;
-        while (msg[i] != STRING_TERMINATION) {
-            string.append((char) msg[i]);
-            i++;
-        }
-
-        return string.toString();
-    }
-
-    /**
-     * Read a string from the byte array.
-     *
-     * @param msg byte array which contain the message.
-     * @param start byte position from which the reading will begin.
-     * @return a String.
-     */
-    public static String readString(final byte[] msg, final int start) {
-        return readCString(msg, start + 4);
-    }
 
     /**
      * process the OP_QUERY request.
@@ -210,7 +170,7 @@ class ConnectionHandler implements Runnable {
     public void processQuery(final byte[] msg) {
 
         //get collection name to run listner if find
-        String collection_name = readCString(msg, 20);
+        String collection_name = Read.CString(msg, 20);
 
         //get documment in msg
         Document doc = new Document(msg, 29 + collection_name.length());
@@ -289,19 +249,5 @@ class ConnectionHandler implements Runnable {
         return msg;
     }
 
-    /**
-     * Consertion of 4bytes to a single int.
-     *
-     * @param bytes array were the integer will be read.
-     * @param start byte position from which the reading will begin.
-     * @return
-     */
-    protected static int readInt(final byte[] bytes, final int start) {
-
-        return (bytes[start + 3] << 24) & 0xff000000
-                | (bytes[start + 2] << 16) & 0x00ff0000
-                | (bytes[start + 1] << 8) & 0x0000ff00
-                | (bytes[start]) & 0x000000ff;
-    }
 
 }

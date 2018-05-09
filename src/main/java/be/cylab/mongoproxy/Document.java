@@ -23,7 +23,6 @@
  */
 package be.cylab.mongoproxy;
 
-import static be.cylab.mongoproxy.ConnectionHandler.readInt;
 import java.util.LinkedList;
 
 /**
@@ -44,13 +43,13 @@ public class Document {
      */
     public Document(final byte[] msg, final int start) {
         this.start = start;
-        size = readInt(msg, start);
+        size = Read.Int(msg, start);
 
         elements = new LinkedList<>();
         int pointer = start + 4;
 
         while (pointer < (start + size - 1)) {
-            Element el = readElement(msg, pointer);
+            Element el = Read.Element(msg, pointer);
             elements.add(el);
             pointer += el.size();
 
@@ -67,28 +66,7 @@ public class Document {
         return size;
     }
 
-    /**
-     * reconstruct the parts of the document.
-     *
-     * @param msg bytes array from which the BSON will be read.
-     * @param start byte position from which the reading will begin.
-     * @return an object of type Element.
-     */
-    public final Element readElement(final byte[] msg, final int start) {
 
-        return Element.parse(msg, start);
-    }
-
-    /**
-     * Extract a Byte from a Bytes array.
-     *
-     * @param msg bytes array from which the BSON will be read.
-     * @param start byte position from which the reading will begin.
-     * @return a byte.
-     */
-    public static final Byte readByte(final byte[] msg, final int start) {
-        return msg[start];
-    }
 
     /**
      *

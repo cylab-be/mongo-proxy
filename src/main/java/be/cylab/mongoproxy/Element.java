@@ -23,10 +23,6 @@
  */
 package be.cylab.mongoproxy;
 
-import static be.cylab.mongoproxy.ConnectionHandler.readInt;
-import static be.cylab.mongoproxy.Document.readByte;
-import static be.cylab.mongoproxy.ConnectionHandler.readCString;
-import static be.cylab.mongoproxy.ConnectionHandler.readString;
 import java.util.Arrays;
 
 /**
@@ -71,7 +67,7 @@ public abstract class Element<T> {
      * @return a boolean.
      */
     public static boolean readBoolean(final byte[] msg, final int start) {
-        byte b = readByte(msg, start);
+        byte b = Read.Byte(msg, start);
         return b == 1;
     }
 
@@ -110,16 +106,16 @@ public abstract class Element<T> {
      * @return an Element.
      */
     public static Element parse(final byte[] msg, final int start) {
-        int type = readByte(msg, start);
-        String name = readCString(msg, start + 1);
+        int type = Read.Byte(msg, start);
+        String name = Read.CString(msg, start + 1);
 
         if (type == 16) {
-            int value = readInt(msg, start + name.length() + 2);
+            int value = Read.Int(msg, start + name.length() + 2);
             return new ElementInt(type, name, value);
         }
 
         if (type == 2) {
-            String value = readString(msg, start + name.length() + 2);
+            String value = Read.String(msg, start + name.length() + 2);
             return new ElementString(type, name, value);
         }
 

@@ -78,6 +78,16 @@ public enum OpCode {
      */
     OP_UNKNOWN(0);
 
+    /**
+     * Get the name of this opcode.
+     *
+     * @param opcode code of the request.
+     * @return a String.
+     */
+    public static String getOpcodeName(final int opcode) {
+        return OpCode.findByValue(opcode).name();
+    }
+
     private final int code;
 
     /**
