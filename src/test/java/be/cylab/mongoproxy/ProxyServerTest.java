@@ -27,6 +27,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.bson.Document;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -46,6 +47,8 @@ public class ProxyServerTest {
      * Port on which the mongo server is listening.
      */
     public static final int MONGO_PORT = 27017;
+
+    AtomicInteger notifications = new AtomicInteger(0);
 
     /**
      * Test of run method, of class ProxyServer.
@@ -74,6 +77,7 @@ public class ProxyServerTest {
                     @Override
                     public void run(
                             final be.cylab.mongoproxy.Document doc) {
+                        notifications.incrementAndGet();
                         System.out.println("Notified: " + doc);
                     }
                 });
@@ -99,6 +103,8 @@ public class ProxyServerTest {
         // Check the final number of documents
         long final_count = collection.count();
         assertEquals(initial_count + 2, final_count);
+
+        assertEquals(2, notifications.intValue());
 
     }
 
