@@ -104,7 +104,7 @@ public class ProxyServerTest {
         long final_count = collection.count();
         assertEquals(initial_count + 2, final_count);
 
-        //assertEquals(2, notifications.intValue());
+        assertEquals(2, notifications.intValue());
 
     }
 
