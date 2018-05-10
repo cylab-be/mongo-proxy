@@ -37,20 +37,20 @@ import org.slf4j.LoggerFactory;
  */
 class ConnectionHandler implements Runnable {
 
-    private final int port_db;
-    private final String ip;
+    private final int mongo_port;
+    private final String mongo_ip;
     private final Logger logger = LoggerFactory.getLogger(
             ConnectionHandler.class);
     private final Socket client;
     private final HashMap<String, LinkedList<Listener>> listeners;
 
     ConnectionHandler(
-            final Socket client, final String ip, final int port_db,
+            final Socket client, final String mongo_ip, final int mongo_port,
             final HashMap<String, LinkedList<Listener>> listeners) {
         this.client = client;
         this.listeners = listeners;
-        this.ip = ip;
-        this.port_db = port_db;
+        this.mongo_ip = mongo_ip;
+        this.mongo_port = mongo_port;
     }
 
     @Override
@@ -58,17 +58,21 @@ class ConnectionHandler implements Runnable {
         try {
             InputStream client_in = client.getInputStream();
             OutputStream client_out = client.getOutputStream();
+
             // Connect to server
-            Socket srv_socket = new Socket(ip, port_db);
+            Socket srv_socket = new Socket(mongo_ip, mongo_port);
             OutputStream srv_out = srv_socket.getOutputStream();
             InputStream srv_in = srv_socket.getInputStream();
+
             while (true) {
                 byte[] msg = readMessage(client_in);
                 int opcode = Helper.readInt(msg, 12);
                 logger.info("Opcode: {}", OpCode.getOpcodeName(opcode));
+
                 if (opcode == 2004) {
                     processQuery(msg);
                 }
+
                 srv_out.write(msg);
                 byte[] response = readMessage(srv_in);
                 client_out.write(response);
@@ -90,39 +94,30 @@ class ConnectionHandler implements Runnable {
      * @param msg byte array which contain the message.
      */
     public void processQuery(final byte[] msg) {
-        //get collection name to run listner if find
-        String collection_name = Helper.readCString(msg, 20);
-        //get documment in msg
-        Document doc = new Document(msg, 29 + collection_name.length());
-        System.out.println("collection name: " + collection_name);
-        System.out.println("doc: " + doc.toString());
-        //check if the first part of the document is ElementString
-        Boolean is_string = doc.get(0).isString();
-        System.out.println("Value: " + is_string);
-        if (is_string) {
-            //create key of the listener
-            String collection_request = collection_name + doc.get(0).value();
-            System.out.println("collection_request: " + collection_request);
+        // We use the terminology of the driver
+        // In the wire protocol documentation, the db is actually called the
+        // collection name
+        String db_name = Helper.readCString(msg, 20);
+        logger.info("db_name: {}", db_name);
 
-            LinkedList<Listener> collection_listeners = listeners.get(
-                    collection_request);
+        // Parse the document
+        Document doc = new Document(msg, 29 + db_name.length());
+        logger.info("doc: {}", doc.toString());
 
-            Document bson = new Document(msg, 29
-                    + collection_name.length()
-                    + doc.get(0).size()
-                    + doc.get(1).size()
-                    + doc.get(2).size());
-
-            System.out.println("Bson extract: " + bson.toString());
-
-            for (Listener listener : collection_listeners) {
-
-                listener.run(bson);
-                logger.info("listner running...");
-            }
+        if (!doc.get(0).isString()) {
+            return;
         }
-        logger.debug("Document: {}", doc.toString());
-        logger.debug("collection name: {}", collection_name);
+
+        // the first element of the document should be the collection name
+        String collection_name = doc.get(0).value().toString();
+        String key = db_name + collection_name;
+        logger.info("key: {}", key);
+
+        LinkedList<Listener> collection_listeners = listeners.get(key);
+        for (Listener listener : collection_listeners) {
+            logger.info("Running listener...");
+            listener.run(doc);
+        }
     }
 
     /**
