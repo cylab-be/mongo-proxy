@@ -32,7 +32,7 @@ import java.util.LinkedList;
 public class Document {
 
     private final int start;
-    private final int size;
+    private final int byte_size;
     private final LinkedList<Element> elements;
 
     /**
@@ -43,12 +43,12 @@ public class Document {
      */
     public Document(final byte[] msg, final int start) {
         this.start = start;
-        size = Helper.readInt(msg, start);
+        byte_size = Helper.readInt(msg, start);
 
         elements = new LinkedList<>();
         int pointer = start + 4;
 
-        while (pointer < (start + size - 1)) {
+        while (pointer < (start + byte_size - 1)) {
             Element el = Helper.readElement(msg, pointer);
             elements.add(el);
             pointer += el.size();
@@ -61,8 +61,8 @@ public class Document {
      *
      * @return an integer
      */
-    public final int size() {
-        return size;
+    public final int byteSize() {
+        return byte_size;
     }
 
     /**
@@ -83,6 +83,14 @@ public class Document {
     public final Element get(final int index) {
 
         return elements.get(index);
+    }
+
+    /**
+     * Get the number of elements in this document.
+     * @return
+     */
+    public final int size() {
+        return elements.size();
     }
 
     /**

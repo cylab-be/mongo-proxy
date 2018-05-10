@@ -66,7 +66,7 @@ public class ElementString extends Element<String> {
      * @return an integer.
      */
     public int size() {
-        return super.size() + value.length() + 3;
+        return super.size() + value.length() + 5;
     }
 
     @Override

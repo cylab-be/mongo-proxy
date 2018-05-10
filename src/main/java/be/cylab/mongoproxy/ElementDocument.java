@@ -49,7 +49,7 @@ public class ElementDocument extends Element<Document> {
      * @return an integer.
      */
     public int size() {
-        return super.size() + value.size();
+        return super.size() + value.byteSize();
     }
 
     /**
