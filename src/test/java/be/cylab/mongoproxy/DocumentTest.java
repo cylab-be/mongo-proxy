@@ -61,7 +61,6 @@ public class DocumentTest {
         Document inserted_documents = (Document) element_2.value();
         assertEquals(1, inserted_documents.size());
 
-
         Document inserted_document =
                 (Document) inserted_documents.get(0).value();
 
@@ -75,7 +74,7 @@ public class DocumentTest {
 
     }
 
-    private byte[] readFile(String string) throws IOException {
+    private byte[] readFile(final String string) throws IOException {
         InputStream stream = Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream(string);
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
