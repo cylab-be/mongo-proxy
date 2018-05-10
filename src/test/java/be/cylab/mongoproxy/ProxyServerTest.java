@@ -48,7 +48,7 @@ public class ProxyServerTest {
      */
     public static final int MONGO_PORT = 27017;
 
-    AtomicInteger notifications = new AtomicInteger(0);
+    private AtomicInteger notifications = new AtomicInteger(0);
 
     /**
      * Test of run method, of class ProxyServer.
@@ -130,6 +130,5 @@ class ClientTest implements Runnable {
                 .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
                 .append("info", new Document("x", 203).append("y", 102));
         collection.insertOne(doc2);
-        //collection.deleteMany(Filters.eq("name", "MongoDB"));
     }
 }
