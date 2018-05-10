@@ -26,6 +26,8 @@ package be.cylab.mongoproxy;
 import java.util.Arrays;
 
 /**
+ * In BSON, an Element is a triplet type, name and value.
+ * Each subclass implements the methods related to a particular value type.
  *
  * @author Thibault Debatty
  * @param <T> type of value contained in the element
@@ -51,6 +53,14 @@ public abstract class Element<T> {
      * @return T value.
      */
     public abstract T value();
+
+    /**
+     * Get the name of this element.
+     * @return
+     */
+    public final String getName() {
+        return this.name;
+    }
 
     /**
      *

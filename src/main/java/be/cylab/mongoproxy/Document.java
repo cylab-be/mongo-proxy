@@ -26,7 +26,7 @@ package be.cylab.mongoproxy;
 import java.util.LinkedList;
 
 /**
- *
+ * In BSON, a document is actually a list of elements.
  * @author Thibault Debatty
  */
 public class Document {
@@ -58,7 +58,7 @@ public class Document {
     }
 
     /**
-     * size of the document.
+     * Size of the document, in Bytes.
      *
      * @return an integer
      */
@@ -68,21 +68,37 @@ public class Document {
 
     /**
      *
-     * @return display document.
+     * @return
      */
     public final String toString() {
         return elements.toString();
     }
 
     /**
-     * Read a part of document.
+     * Get the element of this document at given position.
      *
-     * @param index index of the Element type in the list of element.
-     * @return an object of type Element.
+     * @param index position of the Element
+     * @return Element
      */
-    public Element get(final int index) {
+    public final Element get(final int index) {
 
         return elements.get(index);
+    }
+
+    /**
+     * Get the element that has the given name.
+     * @param name
+     * @return
+     */
+    public Element get(final String name) {
+        for (Element el : elements) {
+            if (el.getName().equals(name)) {
+                return el;
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "No element found with name " + name);
     }
 
 }

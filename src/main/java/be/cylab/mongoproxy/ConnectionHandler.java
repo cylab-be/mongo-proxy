@@ -104,19 +104,29 @@ class ConnectionHandler implements Runnable {
         Document doc = new Document(msg, 29 + db_name.length());
         logger.info("doc: {}", doc.toString());
 
+        // the first element of the document should be the collection name
         if (!doc.get(0).isString()) {
             return;
         }
-
-        // the first element of the document should be the collection name
         String collection_name = doc.get(0).value().toString();
         String key = db_name + collection_name;
         logger.info("key: {}", key);
 
         LinkedList<Listener> collection_listeners = listeners.get(key);
+
+        // Extract the inserted document
+        Element documents_element = doc.get("documents");
+        if (!documents_element.isDocument()) {
+            return;
+        }
+
+        Document documents = (Document) documents_element.value();
+        Document document = (Document) documents.get(0).value();
+
+
         for (Listener listener : collection_listeners) {
             logger.info("Running listener...");
-            listener.run(doc);
+            listener.run(document);
         }
     }
 
