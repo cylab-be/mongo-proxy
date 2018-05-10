@@ -31,9 +31,9 @@ import java.util.LinkedList;
  */
 public class Document {
 
-    private int start;
-    private int size;
-    private LinkedList<Element> elements;
+    private final int start;
+    private final int size;
+    private final LinkedList<Element> elements;
 
     /**
      * Read BSON document from a Bytes array.
@@ -54,7 +54,6 @@ public class Document {
             pointer += el.size();
 
         }
-
     }
 
     /**
@@ -62,7 +61,7 @@ public class Document {
      *
      * @return an integer
      */
-    public int size() {
+    public final int size() {
         return size;
     }
 
@@ -70,6 +69,7 @@ public class Document {
      *
      * @return
      */
+    @Override
     public final String toString() {
         return elements.toString();
     }
@@ -90,7 +90,7 @@ public class Document {
      * @param name
      * @return
      */
-    public Element get(final String name) {
+    public final Element get(final String name) {
         for (Element el : elements) {
             if (el.getName().equals(name)) {
                 return el;
