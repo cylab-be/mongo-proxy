@@ -16,14 +16,25 @@ srv.addListener("admin.$cmd", new Listener() {
 });
 srv.run();
 ```
-Version of mongodb driverDriverMongodb Wire protocol
-3.5db/collection/insertOne(document)
+#MongoDb Wire Protocol Structure
+this table shows the structure of the driver message for different version of driver and command done.
+
+|Version of mongodb driver |  Command         |[Mongodb Wire protocol](https://docs.mongodb.com/manual/reference/mongodb-wire-protocol/)  |
+|--------------------------|-------------------|-----------------------------|
+|3.5						    | db/collection/insertOne(document)| opCode = Op_Query 
+|.|.|fullCollectionName = dbName.$cmd
+|.|.|Document = [insert:collectionName, ordered:true, documents:[...] ]
+
+
+
+
+
  
 
 
-opCode = Op_Query
 
-fullCollectionName
- = dbName.$cmd
 
-Document = [insert:collectionName, ordered:true, documents:[É]]
+
+
+
+
