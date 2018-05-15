@@ -67,7 +67,7 @@ public class Document {
 
     /**
      *
-     * @return
+     * @return a String.
      */
     @Override
     public final String toString() {
@@ -87,7 +87,7 @@ public class Document {
 
     /**
      * Get the number of elements in this document.
-     * @return
+     * @return an Integer.
      */
     public final int size() {
         return elements.size();
@@ -95,8 +95,8 @@ public class Document {
 
     /**
      * Get the element that has the given name.
-     * @param name
-     * @return
+     * @param name name of the element.
+     * @return an Element.
      */
     public final Element get(final String name) {
         for (Element el : elements) {

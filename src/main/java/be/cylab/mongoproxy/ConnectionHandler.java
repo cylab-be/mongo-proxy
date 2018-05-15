@@ -68,6 +68,12 @@ class ConnectionHandler implements Runnable {
                 byte[] msg = readMessage(client_in);
                 int opcode = Helper.readInt(msg, 12);
                 logger.info("Opcode: {}", OpCode.getOpcodeName(opcode));
+                /**
+                 * the opcode 2004 represent de Op_Query request in the Mongo
+                 * Wire Protocol
+https://docs.mongodb.com/manual/reference/mongodb-wire-protocol/#request-opcodes
+                 *
+                 */
 
                 if (opcode == 2004) {
                     processQuery(msg);
@@ -122,7 +128,6 @@ class ConnectionHandler implements Runnable {
 
         Document documents = (Document) documents_element.value();
         Document document = (Document) documents.get(0).value();
-
 
         for (Listener listener : collection_listeners) {
             logger.info("Running listener...");

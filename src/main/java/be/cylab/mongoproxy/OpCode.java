@@ -30,7 +30,8 @@ package be.cylab.mongoproxy;
 public enum OpCode {
 
     /**
-     *
+     * opcode request in Mongodb Wire Protocol.
+https://docs.mongodb.com/manual/reference/mongodb-wire-protocol/#request-opcodes
      */
     OP_REPLY(1),
     /**

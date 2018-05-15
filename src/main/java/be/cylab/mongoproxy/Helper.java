@@ -83,6 +83,23 @@ public final class Helper {
     }
 
     /**
+     *
+     * @param bytes array were the double will be read.
+     * @param start byte position from which the reading will begin.
+     * @return a double.
+     */
+    protected static double readDouble(final byte[] bytes, final int start) {
+        long longbits = 0;
+        int i = start;
+        for (int shiftby = 0; shiftby < 64; shiftby += 8) {
+            longbits |= ((long) (bytes[start + i] & 0xff)) << shiftby;
+            i++;
+        }
+
+        return Double.longBitsToDouble(longbits);
+    }
+
+    /**
      * Extract a Byte from a Bytes array.
      *
      * @param msg bytes array from which the BSON will be read.
