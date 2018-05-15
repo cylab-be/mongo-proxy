@@ -16,3 +16,14 @@ srv.addListener("admin.$cmd", new Listener() {
 });
 srv.run();
 ```
+Version of mongodb driverDriverMongodb Wire protocol
+3.5db/collection/insertOne(document)
+ 
+
+
+opCode = Op_Query
+
+fullCollectionName
+ = dbName.$cmd
+
+Document = [insert:collectionName, ordered:true, documents:[É]]
