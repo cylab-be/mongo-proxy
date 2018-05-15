@@ -113,6 +113,14 @@ public abstract class Element<T> {
 
     /**
      *
+     * @return true if the return class is ElementBinary.
+     */
+    public boolean isBinary() {
+        return false;
+    }
+
+    /**
+     *
      * @param msg bytes array from which the boolean will be read.
      * @param start byte position from which the reading will begin.
      * @return a boolean.
@@ -182,6 +190,10 @@ public abstract class Element<T> {
         if (type == 4) {
             Document value = new Document(msg, start + name.length() + 2);
             return new ElementDocument(type, name, value);
+        }
+        if (type == 5) {
+            int value = Helper.readInt(msg, start + name.length() + 2);
+            return new ElementBinary(type, name, value);
         }
 
         if (type == 7) {
