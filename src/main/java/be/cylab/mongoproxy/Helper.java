@@ -58,6 +58,23 @@ public final class Helper {
     }
 
     /**
+     *
+     * @param bytes array were the Int64 will be read.
+     * @param start byte position from which the reading will begin.
+     * @return a double.
+     */
+    protected static long readInt64(final byte[] bytes, final int start) {
+        long longbits = 0;
+        int i = start;
+        for (int shiftby = 0; shiftby < 64; shiftby += 8) {
+            longbits |= ((long) (bytes[start + i] & 0xff)) << shiftby;
+            i++;
+        }
+
+        return longbits;
+    }
+
+    /**
      * Read a string from the byte array.
      *
      * @param msg byte array which contain the message.

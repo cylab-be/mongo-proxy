@@ -121,6 +121,14 @@ public abstract class Element<T> {
 
     /**
      *
+     * @return true if the return class is ElemenUTCdatetime.
+     */
+    public boolean isUTCdatetime() {
+        return false;
+    }
+
+    /**
+     *
      * @param msg bytes array from which the boolean will be read.
      * @param start byte position from which the reading will begin.
      * @return a boolean.
@@ -204,6 +212,11 @@ public abstract class Element<T> {
         if (type == 8) {
             boolean value = readBoolean(msg, start + name.length() + 2);
             return new ElementBoolean(type, name, value);
+        }
+
+        if (type == 9) {
+            long value = Helper.readInt64(msg, name.length() + 2);
+            return new ElementUTCdatetime(type, name, value);
         }
 
         return new DummyElement(type, name);

@@ -27,6 +27,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.util.Arrays;
+import static java.util.Collections.list;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.bson.Document;
 import org.junit.Test;
@@ -130,5 +132,6 @@ class ClientTest implements Runnable {
                 .append("versions", Arrays.asList("v3.2", "v3.0", "v2.6"))
                 .append("info", new Document("x", 203).append("y", 102));
         collection.insertOne(doc2);
+        
     }
 }

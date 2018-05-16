@@ -23,14 +23,17 @@
  */
 package be.cylab.mongoproxy;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 /**
- * Binary part in BSON document.
+ * UTC datetime part in BSON structure.
  *
  * @author sonoflight
  */
-public class ElementBinary extends Element<String> {
+public class ElementUTCdatetime extends Element<Date> {
 
-    private final String value;
+    private final Date value;
 
     /**
      *
@@ -38,18 +41,26 @@ public class ElementBinary extends Element<String> {
      * @param name Element name.
      * @param value Element value.
      */
-    public ElementBinary(final int type, final String name, final int value) {
+    public ElementUTCdatetime(
+            final int type, final String name, final long value) {
         super(type, name);
-        this.value = Integer.toBinaryString(value);
+        this.value = new Date(TimeUnit.SECONDS.toMillis(value));
     }
 
     /**
      *
-     * @return true if the return class is ElementBinary.
+     * @return true if the return class is ElemenUTCdatetime.
      */
     @Override
-    public boolean isBinary() {
+    public boolean isUTCdatetime() {
         return true;
+    }
+
+    @Override
+    public Date value() {
+
+        return value;
+
     }
 
     /**
@@ -61,13 +72,8 @@ public class ElementBinary extends Element<String> {
     }
 
     @Override
-    public String value() {
-        return value;
-    }
-
-    @Override
     public int size() {
-        return super.size() + 4;
+        return super.size() + 16;
     }
 
 }
