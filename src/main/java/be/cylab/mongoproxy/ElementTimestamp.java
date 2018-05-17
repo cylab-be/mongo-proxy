@@ -23,17 +23,15 @@
  */
 package be.cylab.mongoproxy;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.sql.Timestamp;
 
 /**
- * UTC datetime part in BSON structure.
  *
  * @author sonoflight
  */
-public class ElementUTCdatetime extends Element<Date> {
+public class ElementTimestamp extends Element<Timestamp> {
 
-    private final Date value;
+    private final Timestamp value;
 
     /**
      *
@@ -41,26 +39,17 @@ public class ElementUTCdatetime extends Element<Date> {
      * @param name Element name.
      * @param value Element value.
      */
-    public ElementUTCdatetime(
-            final int type, final String name, final long value) {
+    ElementTimestamp(final int type, final String name, final long value) {
         super(type, name);
-        this.value = new Date(TimeUnit.SECONDS.toMillis(value));
+        this.value = new Timestamp(value);
     }
 
     /**
      *
-     * @return true if the return class is ElemenUTCdatetime.
+     * @return true if the return class is ElementTimestamp.
      */
-    @Override
-    public boolean isUTCdatetime() {
+    public boolean isTimestamp() {
         return true;
-    }
-
-    @Override
-    public Date value() {
-
-        return value;
-
     }
 
     /**
@@ -74,6 +63,12 @@ public class ElementUTCdatetime extends Element<Date> {
     @Override
     public int size() {
         return super.size() + 8;
+    }
+
+    @Override
+    public Timestamp value() {
+        return value;
+
     }
 
 }

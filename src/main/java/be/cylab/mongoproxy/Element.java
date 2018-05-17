@@ -121,9 +121,17 @@ public abstract class Element<T> {
 
     /**
      *
-     * @return true if the return class is ElemenUTCdatetime.
+     * @return true if the return class is ElementUTCdatetime.
      */
     public boolean isUTCdatetime() {
+        return false;
+    }
+
+    /**
+     *
+     * @return true if the return class is ElementTimestamp.
+     */
+    public boolean isTimestamp() {
         return false;
     }
 
@@ -217,6 +225,11 @@ public abstract class Element<T> {
         if (type == 9) {
             long value = Helper.readInt64(msg, name.length() + 2);
             return new ElementUTCdatetime(type, name, value);
+        }
+
+        if (type == 17) {
+            long value = Helper.readInt64(msg, name.length() + 2);
+            return new ElementTimestamp(type, name, value);
         }
 
         return new DummyElement(type, name);
