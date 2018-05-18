@@ -137,6 +137,14 @@ public abstract class Element<T> {
 
     /**
      *
+     * @return true if the return class is ElementInt64.
+     */
+    public boolean isInt64() {
+        return false;
+    }
+
+    /**
+     *
      * @param msg bytes array from which the boolean will be read.
      * @param start byte position from which the reading will begin.
      * @return a boolean.
@@ -230,6 +238,11 @@ public abstract class Element<T> {
         if (type == 17) {
             long value = Helper.readInt64(msg, name.length() + 2);
             return new ElementTimestamp(type, name, value);
+        }
+
+        if (type == 18) {
+            long value = Helper.readInt64(msg, name.length() + 2);
+            return new ElementInt64(type, name, value);
         }
 
         return new DummyElement(type, name);

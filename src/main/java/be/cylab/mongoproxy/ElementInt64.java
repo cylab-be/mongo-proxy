@@ -24,31 +24,23 @@
 package be.cylab.mongoproxy;
 
 /**
- * Double part in a BSON structure.
  *
  * @author sonoflight
  */
-public class ElementDouble extends Element<Double> {
+public class ElementInt64 extends Element<Long> {
 
-    private final double value;
-
-    ElementDouble(
-            final int type, final String name, final double value) {
-        super(type, name);
-        this.value = value;
-    }
-    @Override
-    public int size() {
-        return super.size() + 8;
-    }
+    private final long value;
 
     /**
      *
-     * @return true if the return class is ElementDouble.
+     * @param type Element type.
+     * @param name Element name.
+     * @param value Element value.
      */
-    @Override
-    public boolean isDouble() {
-        return true;
+    public ElementInt64(final int type, final String name, final long value) {
+        super(type, name);
+        this.value = value;
+
     }
 
     /**
@@ -59,9 +51,22 @@ public class ElementDouble extends Element<Double> {
         return super.toString() + ":" + value;
     }
 
-    @Override
-    public Double value() {
-        return value;
+    /**
+     *
+     * @return true if the return class is ElementInt64.
+     */
+    public boolean isInt64() {
+        return true;
     }
 
+    @Override
+    public int size() {
+        return super.size() + 8;
+    }
+
+    @Override
+    public Long value() {
+        return value;
+
+    }
 }
