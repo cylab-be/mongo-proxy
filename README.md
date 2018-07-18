@@ -1,8 +1,14 @@
 # Mongo Proxy
 
-[![Maven](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/be/cylab/mongo-proxy/maven-metadata.xml.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22be.cylab%22%20AND%20a%3A%22mongo-proxy%22) [![Build Status](https://travis-ci.org/cylab-be/mongo-proxy.svg?branch=master)](https://travis-ci.org/cylab-be/mongo-proxy) [![Coverage Status](https://coveralls.io/repos/github/cylab-be/mongo-proxy/badge.svg?branch=master)](https://coveralls.io/github/cylab-be/mongo-proxy?branch=master)
+[![Maven](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/be/cylab/mongo-proxy/maven-metadata.xml.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22be.cylab%22%20AND%20a%3A%22mongo-proxy%22)
+[![Build Status](https://travis-ci.org/cylab-be/mongo-proxy.svg?branch=master)](https://travis-ci.org/cylab-be/mongo-proxy)
+[![Coverage Status](https://coveralls.io/repos/github/cylab-be/mongo-proxy/badge.svg?branch=master)](https://coveralls.io/github/cylab-be/mongo-proxy?branch=master)
 
-A proxy for MongoDB written in Java. Using this proxy allows to easily trigger additional actions when data is inserted in the database, for example:
+A proxy for MongoDB written in Java. Using this proxy allows to easily trigger additional actions when data is inserted in the database
+
+Developement now takes place at https://gitlab.cylab.be/cylab/mongo-proxy
+
+## Example
 
 ```java
 // port on which the proxy will be listening 
@@ -16,7 +22,7 @@ srv.addListener("admin.$cmd", new Listener() {
 });
 srv.run();
 ```
-# MongoDb Wire Protocol Structure
+## MongoDb Wire Protocol Structure
 this table shows the structure of the driver message for different version of driver and command done.
 
 |Version of mongodb driver |  Command         |[Mongodb Wire protocol](https://docs.mongodb.com/manual/reference/mongodb-wire-protocol/)  |
