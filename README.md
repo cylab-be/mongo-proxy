@@ -1,6 +1,6 @@
 # Mongo Proxy
 
-![Maven Central](https://img.shields.io/maven-central/v/be.cylab/mongo-proxy.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/be.cylab/mongo-proxy.svg)](https://mvnrepository.com/artifact/be.cylab/mongo-proxy)
 [![Build Status](https://travis-ci.org/cylab-be/mongo-proxy.svg?branch=master)](https://travis-ci.org/cylab-be/mongo-proxy)
 [![Coverage Status](https://coveralls.io/repos/github/cylab-be/mongo-proxy/badge.svg?branch=master)](https://coveralls.io/github/cylab-be/mongo-proxy?branch=master)
 
